@@ -3,11 +3,8 @@ CFLAGS  = -g -Wall -Werror
 
 default: client
 
-client: Connector.o
-	$(CC) $(CFLAGS) -o Client Connector.o
-
-client: performConnection.o
-	$(CC) $(CFLAGS) -o performConnection.o
+client: Main.o
+	$(CC) $(CFLAGS) -o Client Main.o
 
 clean:
 	$(RM) count *.o *~
