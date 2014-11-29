@@ -4,9 +4,6 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-#define GAMEKINDNAME    "NMMorris"
-#define PORTNUMBER      1357
-#define HOSTNAME        "sysprak.priv.lab.nm.ifi.lmu.de"
 #define BUFFER          1024
 
 void error(char errorCode, char *msg)
@@ -18,7 +15,7 @@ void error(char errorCode, char *msg)
     }
 }
 
-void performConnection(int sock, char *gameID)
+void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME)
 {
     struct sockaddr_in server;
     struct hostent *host = gethostbyname(HOSTNAME);
