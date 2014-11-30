@@ -13,11 +13,11 @@ struct config
 };
 
 void chomp(char *str) 
-	{
+{
 	size_t p=strlen(str);
 	/* '\n' mit '\0' überschreiben */
 	str[p-2]='\0';
-	}
+}
 
 struct config *confparam(FILE *datei)
 {
@@ -28,7 +28,8 @@ struct config *confparam(FILE *datei)
 	int nRet;
 	char *pname = malloc(sizeof(char));
 	char *pwert = malloc(sizeof(char));
-	while( (nRet=getline(text, t, datei)) > 0)//Hier wird jede Zeile der Datei eingelesen und in text gespeichert.
+	//Hier wird jede Zeile der Datei eingelesen und in text gespeichert.
+	while( (nRet=getline(text, t, datei)) > 0)
 	{
       		chomp(*text);
 		//Hier wird jede Zeile in den zwei Teilen aufgespaltet.
@@ -42,7 +43,7 @@ struct config *confparam(FILE *datei)
 		} 
 		else if (strcmp(pname,"HOSTNAME")==0) 
 		{
-		strcpy(conf->hostname, pwert);
+			strcpy(conf->hostname, pwert);
 		}
 		else if (strcmp(pname,"PORTNUMBER")==0) 
 		{	
