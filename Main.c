@@ -3,9 +3,22 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/shm.h>
+#include <sys/ipc.h>
+
+#include "gameDetails.h"
 
 #include "config.c"
 #include "Connector.c"
+
+struct gameDetails
+{
+   char *playerName;
+   int playerTotalCount;
+   int playerNumber;
+   int ppid;
+   int pid;
+} game;
 
 int main(int argc, const char *argv[])
 {
@@ -29,14 +42,14 @@ int main(int argc, const char *argv[])
 	}
 	else 
 	{	
-		//open argv[2]
+		//open argv[2] - optional Configfile
 		if(strstr(argv[2], ".conf")!= NULL)
 		{
-		confdatei=fopen(argv[2], "r");
+			confdatei=fopen(argv[2], "r");
 		}
 		else
 		{
-		confdatei= NULL;
+			confdatei= NULL;
 		}
 	}
 	
@@ -50,8 +63,24 @@ int main(int argc, const char *argv[])
   		printf("Konnte Datei nicht finden bzw. öffnen!\n");
   		return EXIT_FAILURE;
    	}
-	
-	
+
+	//-------------SHM--------------//
+	int shm_id = shmget(IPC_PRIVATE, sizeof(game), IPC_CREAT | 0666);
+	int *shmptr = (int *) shmat(shm_id, NULL, 0);
+
+	if (shm_id < 0)
+	{
+		fprintf(stderr, "Fehler bei shmget().\n");
+		return EXIT_FAILURE;
+	}
+
+	if ((int) shmptr == -1)
+	{
+		fprintf(stderr, "Fehler bei shmat().\n");
+		return EXIT_FAILURE;
+    }
+
+
 	//-------------FORK-------------//
 	pid_t pid;
 
@@ -61,15 +90,27 @@ int main(int argc, const char *argv[])
 	} else if (pid == 0) {
 	/* Connector */
 		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname);
+		strcpy(playerName, game.playerName);
+		game.playerTotalCount = playerCount;
+		game.playerNumber = playerNumber;
+		game.pid = getpid();
 	} else {
 	/* Thinker */
-		if(waitpid(pid, NULL, 0) < 0)
-		{
+		game.ppid = getpid();
+		if(waitpid(pid, NULL, 0) < 0) {
 			perror("Fehler beim Warten auf Kindprozess!");
 		 	return EXIT_FAILURE;
+		} else if(waitpid(pid, NULL, 0) == 0) {
+			//further Code
+			if(shmctl(shm_id, IPC_RMID, 0) == -1)
+			{
+				fprintf(stderr, "Fehler bei shmctl().\n");
+				return EXIT_FAILURE;
+			}
+			return EXIT_SUCCESS;
 		}
-		exit(0);
 	}
-	
+	//-------------FORK-END---------//
+
 	return EXIT_SUCCESS;
 }
