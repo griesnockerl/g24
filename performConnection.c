@@ -4,7 +4,9 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-#define BUFFER          1024
+#include "gameDetails.h"
+
+#define BUFFER	1024
 
 void error(char errorCode, char *msg)
 {
@@ -100,4 +102,18 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     printf("S: %s", playerTotalCount);
 
     error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!");
+
+	//------SHM------//
+	char *strdel = strtok(playerNrAndName, " ");
+	char *pnumber = malloc(sizeof(char));
+	char *pname = malloc(sizeof(char));
+
+	strcpy(pnumber, strdel);
+	strdel = strtok(NULL, " ");
+	strcpy(pname, strdel);
+
+	//init vars in gameDetails.h
+	strcpy(playerName, pname);
+	playerNumber = atoi(pnumber);
+	playerCount = atoi(playerTotalCount);
 }
