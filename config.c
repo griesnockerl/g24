@@ -16,7 +16,7 @@ void chomp(char *str)
 {
 	size_t p=strlen(str);
 	/* '\n' mit '\0' überschreiben */
-	str[p-2]='\0';
+	str[p-1]='\0';
 }
 
 struct config *confparam(FILE *datei)
