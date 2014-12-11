@@ -90,7 +90,7 @@ int main(int argc, const char *argv[])
 	} else if (pid == 0) {
 	/* Connector */
 		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname);
-		strcpy(playerName, game.playerName);
+		strcpy(game.playerName, playerName);
 		game.playerTotalCount = playerCount;
 		game.playerNumber = playerNumber;
 		game.pid = getpid();
