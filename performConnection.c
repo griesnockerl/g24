@@ -104,12 +104,12 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!");
 
 	//------SHM------//
-	char *strdel = strtok(playerNrAndName, " ");
+	char *strdel = strtok(playerNrAndName, "+ YOU");
 	char *pnumber = malloc(sizeof(char));
 	char *pname = malloc(sizeof(char));
 
 	strcpy(pnumber, strdel);
-	strdel = strtok(NULL, " ");
+	strdel = strtok(NULL, "");
 	strcpy(pname, strdel);
 
 	//init vars in gameDetails.h
