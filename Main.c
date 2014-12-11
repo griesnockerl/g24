@@ -74,7 +74,7 @@ int main(int argc, const char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	if ((int) shmptr == -1)
+	if (*shmptr == -1)
 	{
 		fprintf(stderr, "Fehler bei shmat().\n");
 		return EXIT_FAILURE;
