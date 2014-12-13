@@ -133,7 +133,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
 	printf("S: %s", readBuffer);
 	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
 
-	/*---------------SPIELVERLAUF-------------- *
+	/*---------------SPIELVERLAUF-------------- */
 	
 	int testLoop = 1;
 
