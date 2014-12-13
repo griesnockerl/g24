@@ -213,9 +213,9 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
 
 				int shm_id2 = shmget(IPC_PRIVATE, sizeof(?), IPC_CREAT | 0666);
 					
-				int *shmptr = (int *) shmat(shm_id, NULL, 0);
+				int *shmptr = (int *) shmat(shm_id2, NULL, 0);
 
-				if (shm_id < 0)
+				if (shm_id2 < 0)
 				{
 				fprintf(stderr, "Fehler bei shmget().\n");
 				return EXIT_FAILURE;
@@ -305,7 +305,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
 
 
 		default: /* - Fehlermeldung */
-			error(readComm[0], "Fehler im 							Spielverlauf: Fehler beim Lesen des Befehls!");
+			error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
 
 	} 
 
