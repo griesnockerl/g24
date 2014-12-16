@@ -6,7 +6,7 @@
 
 #include "gameDetails.h"
 
-#define BUFFER	1024
+#define BUFFER	8096
 
 void error(char errorCode, char *msg)
 {
