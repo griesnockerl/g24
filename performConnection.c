@@ -55,10 +55,11 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     	gameServerVersion = malloc(BUFFER);
 	while (!(strstr(gameServerVersion, newline))) {
 	
-	recv(sock, junk, BUFFER, 0);
+	recv(sock, junk, BUFFER - 1, 0);
 	strcat(gameServerVersion,junk);
 	
 	}
+	gameServerVersion[BUFFER] = '\0';
 	error(gameServerVersion[0], "Fehler im Prolog: Verbindungsaufbau fehlgeschlagen!");
 	printf("S: %s", gameServerVersion);
 
@@ -72,10 +73,11 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     readBuffer = malloc(BUFFER);
     while (!(strstr(readBuffer, newline))) {
 	
-	recv(sock, junk, BUFFER, 0);
+	recv(sock, junk, BUFFER - 1, 0);
 	strcat(readBuffer,junk);
 	
 	}
+    readBuffer[BUFFER] = '\0';
     printf("S: %s", readBuffer);
     error(readBuffer[0], "Fehler im Prolog: Client version wird nicht  akzeptiert!");
     
@@ -93,10 +95,11 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     junk = malloc(BUFFER);
     while (!(strstr(gameKindName, newline))) {
 	
-	recv(sock, junk, BUFFER, 0);
+	recv(sock, junk, BUFFER - 1, 0);
 	strcat(gameKindName,junk);
 	
     }
+    gameKindName[BUFFER] = '\0';
     printf("S: %s", gameKindName);
     error(gameKindName[0], "Fehler im Prolog: Art des Spiels kann nicht festgelegt werden!");
     
@@ -104,10 +107,11 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     gameName = malloc(BUFFER);
     while (!(strstr(gameName, newline))) {
 	
-	recv(sock, junk, BUFFER, 0);
+	recv(sock, junk, BUFFER - 1, 0);
 	strcat(gameName,junk);
 	
     }
+    gameName[BUFFER] = '\0';
     printf("S: %s", gameName);
     error(gameName[0], "Fehler im Prolog: Spielname kann nicht festgelegt werden!");
    
@@ -124,10 +128,11 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     junk = malloc(BUFFER);
     while (!(strstr(playerNrAndName, newline))) {
 	
-	recv(sock, junk, BUFFER, 0);
+	recv(sock, junk, BUFFER - 1, 0);
 	strcat(playerNrAndName,junk);
 	
     }
+    playerNrAndName[BUFFER] = '\0';
     printf("S: %s", playerNrAndName);
     error(playerNrAndName[0], "Fehler im Prolog: Spielernummer und Spielername kann nicht festgelegt werden!");
     
@@ -136,10 +141,11 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     playerTotalCount = malloc(BUFFER);
     while (!(strstr(playerTotalCount, newline))) {
 	
-	recv(sock, junk, BUFFER, 0);
+	recv(sock, junk, BUFFER - 1, 0);
 	strcat(playerTotalCount,junk);
 	
     }
+    playerTotalCount[BUFFER] = '\0';
     printf("S: %s", playerTotalCount);
     error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!");
    
