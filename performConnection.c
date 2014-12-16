@@ -46,7 +46,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     }
 
     /*---------------PROLOG-------------- */
-    char *readBuffer, *gameServerVersion, *gameKindName, *gameName, *playerNrAndName, *playerTotalCount, char *junk;
+    char *readBuffer, *gameServerVersion, *gameKindName, *gameName, *playerNrAndName, *playerTotalCount, *junk;
 
     
 	junk = malloc(BUFFER);
