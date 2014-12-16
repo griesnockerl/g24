@@ -91,22 +91,24 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     printf("C: %s", gameId);
 
     //Server accept game id and ack with Gamekind name and game name
+    recvtest = 0;
     gameKindName = malloc(BUFFER);
-    recv(sock, gameKindName, BUFFER, 0);
+    recvtest = recv(sock, gameKindName, BUFFER, 0);
     printf("S: %s", gameKindName);
     error(gameKindName[0], "Fehler im Prolog: Art des Spiels kann nicht festgelegt werden!");
-    recvtest = 0;
+    
     while(recvtest != BUFFER){
   
 	recvtest += recv(sock, gameKindName, BUFFER, 0);
 	printf("%s", gameKindName);
   
     }
+    
+    recvtest = 0;
     gameName = malloc(BUFFER);
-    recv(sock, gameName, BUFFER, 0);
+    recvtest = recv(sock, gameName, BUFFER, 0);
     printf("S: %s", gameName);
     error(gameName[0], "Fehler im Prolog: Spielname kann nicht festgelegt werden!");
-    recvtest = 0;
     while(recvtest != BUFFER){
   
 	recvtest += recv(sock, gameName, BUFFER, 0);
@@ -122,11 +124,11 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     printf("C %s", sendPlayerNr);
 
     //Server send Player info: number, name, totalcount
+    recvtest = 0;
     playerNrAndName = malloc(BUFFER);
-    recv(sock, playerNrAndName, BUFFER, 0);
+    recvtest = recv(sock, playerNrAndName, BUFFER, 0);
     printf("S: %s", playerNrAndName);
     error(playerNrAndName[0], "Fehler im Prolog: Spielernummer und Spielername kann nicht festgelegt werden!");
-    recvtest = 0;
     while(recvtest != BUFFER){
   
 	recvtest += recv(sock, playerNrAndName, BUFFER, 0);
@@ -134,11 +136,11 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
   
     }
 
+    recvtest = 0;
     playerTotalCount = malloc(BUFFER);
-    recv(sock, playerTotalCount, BUFFER, 0);
+    recvtest = recv(sock, playerTotalCount, BUFFER, 0);
     printf("S: %s", playerTotalCount);
     error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!");
-    recvtest = 0;
     while(recvtest != BUFFER){
   
 	recvtest += recv(sock, playerTotalCount, BUFFER, 0);
