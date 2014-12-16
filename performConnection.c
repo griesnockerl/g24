@@ -90,7 +90,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     //Server accept game id and ack with Gamekind name and game name
    
     gameKindName = malloc(BUFFER);
-    junk = malloc(Buffer);
+    junk = malloc(BUFFER);
     while (!(strstr(gameKindName, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
