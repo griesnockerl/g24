@@ -53,7 +53,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
 	junk = malloc(BUFFER);
     //Server accept connection
     	gameServerVersion = malloc(BUFFER);
-	while (!(strchr(gameServerVersion, newline))) {
+	while (!(strstr(gameServerVersion, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(gameServerVersion,junk);
@@ -70,7 +70,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     //Server accept Client versioni
     junk = malloc(BUFFER);
     readBuffer = malloc(BUFFER);
-    while (!(strchr(readBuffer, newline))) {
+    while (!(strstr(readBuffer, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(readBuffer,junk);
@@ -91,7 +91,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
    
     gameKindName = malloc(BUFFER);
     junk = malloc(Buffer);
-    while (!(strchr(gameKindName, newline))) {
+    while (!(strstr(gameKindName, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(gameKindName,junk);
@@ -102,7 +102,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     
     junk = malloc(BUFFER);
     gameName = malloc(BUFFER);
-    while (!(strchr(gameName, newline))) {
+    while (!(strstr(gameName, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(gameName,junk);
@@ -122,7 +122,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     
     playerNrAndName = malloc(BUFFER);
     junk = malloc(BUFFER);
-    while (!(strchr(playerNrAndName, newline))) {
+    while (!(strstr(playerNrAndName, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(playerNrAndName,junk);
@@ -134,7 +134,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
 
     junk = malloc(BUFFER);
     playerTotalCount = malloc(BUFFER);
-    while (!(strchr(playerTotalCount, newline))) {
+    while (!(strstr(playerTotalCount, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(playerTotalCount,junk);
