@@ -46,13 +46,14 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     }
 
     /*---------------PROLOG-------------- */
-    char *readBuffer, *gameServerVersion, *gameKindName, *gameName, *playerNrAndName, *playerTotalCount, *junk;
+    char *readBuffer, *gameServerVersion, *gameKindName, *gameName, *playerNrAndName, *playerTotalCount, *junk, *newline;
 
+    	newline = "\n";
     
 	junk = malloc(BUFFER);
     //Server accept connection
     	gameServerVersion = malloc(BUFFER);
-	while (!(strchr(gameServerVersion, "\n"))) {
+	while (!(strchr(gameServerVersion, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(gameServerVersion,junk);
@@ -69,7 +70,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     //Server accept Client versioni
     junk = malloc(BUFFER);
     readBuffer = malloc(BUFFER);
-    while (!(strchr(readBuffer, "\n"))) {
+    while (!(strchr(readBuffer, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(readBuffer,junk);
@@ -90,7 +91,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
    
     gameKindName = malloc(BUFFER);
     junk = malloc(Buffer);
-    while (!(strchr(gameKindName, "\n"))) {
+    while (!(strchr(gameKindName, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(gameKindName,junk);
@@ -101,7 +102,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     
     junk = malloc(BUFFER);
     gameName = malloc(BUFFER);
-    while (!(strchr(gameName, "\n"))) {
+    while (!(strchr(gameName, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(gameName,junk);
@@ -121,7 +122,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
     
     playerNrAndName = malloc(BUFFER);
     junk = malloc(BUFFER);
-    while (!(strchr(playerNrAndName, "\n"))) {
+    while (!(strchr(playerNrAndName, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(playerNrAndName,junk);
@@ -133,7 +134,7 @@ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMB
 
     junk = malloc(BUFFER);
     playerTotalCount = malloc(BUFFER);
-    while (!(strchr(playerTotalCount, "\n"))) {
+    while (!(strchr(playerTotalCount, newline))) {
 	
 	recv(sock, junk, BUFFER, 0);
 	strcat(playerTotalCount,junk);
