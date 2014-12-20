@@ -123,6 +123,224 @@ for ( i = 0; i < BUFFER; i++) {
      printf("S: %s", playerTotalCount); 
   
      error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!"); 
+
+
+for ( i = 0; i < BUFFER; i++) {
+	  recv(sock, &readBuffer[i], 1, 0);
+          if (readBuffer[i] == '\n') break;
+	}
+printf("S: %s", readBuffer);
+	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
+
+/*---------------SPIELVERLAUF-------------- *
+	
+	int testLoop = 1;
+
+while(testLoop) {	
+
+		char *readComm = malloc(BUFFER);
+		for ( i = 0; i < BUFFER; i++) {
+	  		recv(sock, &readComm[i], 1, 0);
+          if (readComm[i] == '\n') break;
+	}
+
+		
+
+switch(readComm[2]) {
+
+		case 'M': /* MOVE */
+				char *maxTimeforMove, *piecesToHit, 						*playersCountpiecesCount, 								*playerNamepieceNrAndPos;
+		
+				maxTimeforMove = malloc(BUFFER);
+				strcpy(maxTimeforMove, readComm);
+				printf("S: %s", maxTimeforMove);
+				error(maxTimeforMove[0], "Fehler im 						Spielverlauf: Maximale Zugzeit kann nicht 					festgelegt werden!");
+				maxTimeMove = atoi(maxTimeforMove);
+
+				piecesToHit = malloc(BUFFER);
+				for ( i = 0; i < BUFFER; i++) {
+	 			 recv(sock, &piecesToHit[i], 1, 0);
+          if (piecesToHit[i] == '\n') break;
+	}
+
+				printf("S: %s", piecesToHit);
+				error(piecesToHit[0], "Fehler im 						Spielverlauf: Anzahl zu schlagender Steine 				kann nicht festgelegt werden!");
+				remainToHit = atoi(piecesToHit);
+				
+				playersCountpiecesCount = malloc(BUFFER);
+				for ( i = 0; i < BUFFER; i++) {
+	  recv(sock, &playersCountpiecesCount[i], 1, 0);
+          if (playersCountpiecesCount[i] == '\n') break;
+	}
+
+				printf("S: %s", playersCountpiecesCount);
+				error(playersCountpiecesCount[0], "Fehler 					im Spielverlauf: Anzahl der Spieler und 					Anzahl der Steine kann nicht festgelegt 					werden!");
+				
+				char *playCount = malloc(sizeof(char));
+				char *piecCount = malloc(sizeof(char));
+				char *strgarbage2 = malloc(BUFFER);
+
+				strgarbage2 = strtok									(playersCountpiecesCount, " ,");
+				strgarbage2 = strtok									(NULL, " ,");
+				playCount = strtok(NULL, " ,");
+				piecCount = strtok(NULL, " ,");
+				
+				/* Vars aus Gamedetails werden geschrieben */
+				playerCount = atoi(playCount);
+				piecesCount = atoi(piecCount);
+
+				
+				char **piecelist;
+				piecelist = malloc(playerCount * sizeof					(int *));
+				char *help = malloc(BUFFER);
+			/*	char *playNr = malloc(sizeof(char));
+				char *stoneNr = malloc(sizeof(char));
+				char *stonePos = malloc(2 * sizeof(char)); 				*/
+/*
+				for (int m = 0; m < playerCount; m++) {
+
+					piecelist[m] = malloc(piecesCount * 						sizeof(?));
+
+				for (int k = 0; k < piecesCount; k++) {
+
+					recv(sock, readBuffer, BUFFER, 0);
+					printf("S: %s", readBuffer);
+					error(readBuffer[0], "Fehler im 							Spielverlauf: Fehler beim ausgeben 						der Spielernummer, Steinnummer und 						Position!");
+			
+					/* trenne readBuffer auf , und 							extrahiere die werte als variablen, 						diese dann in piecelist array 							speichern, damit sie später in SHM */
+
+				/*	help = strtok(readBuffer, ".");
+					strncpy(
+					
+					piecelist[m][k] = ...	*/
+			
+				}
+				}
+
+
+				/* anfang fuer SHM2 for PIECELIST, der Shm 				, größe gemäß anzahl der steine und 						spieler allociieren. */ 
+
+				int shm_id2 = shmget(IPC_PRIVATE, sizeof					(?), IPC_CREAT | 0666);
+					
+				int *shmptr = (int *) shmat(shm_id, NULL, 					0);
+
+				if (shm_id < 0)
+				{
+				fprintf(stderr, "Fehler bei shmget().\n");
+				return EXIT_FAILURE;
+				}
+
+				if (*shmptr == -1)
+				{
+				fprintf(stderr, "Fehler bei shmat().\n");
+				return EXIT_FAILURE;
+    				}
+				
+				/* Ende SHM 2 	*/
+	
+
+				recv(sock, readBuffer, BUFFER, 0);
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler im 							Spielverlauf: Ausgabe der Liste der 						Spielernummer, Steinnummer und Position 					kann nicht korrekt abgeschlossen 						werden!");
+
+				char *think = "THINKING\n";
+				send(sock, think, strlen(think), 0);
+				printf("C: %s", think);
+
+				recv(sock, readBuffer, BUFFER, 0);
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler im 							Spielverlauf: Spielverlaufphase kann nicht 				abgeschlossen werden!");
+
+				/* SPIELZUG */
+
+				/* thinker soll dann berechnen .. etc s. 					M3-2. dann muss noch fehlermeldung falls 					spielzug ungueltig ist rein. */
+				send(sock, ? , ? , 0);
+				printf("C: %s", );
+				recv(sock, readBuffer, BUFFER, 0);
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler beim 						Spielzug!");
+			
+				break; */
+		
+		case 'W': /* WAIT */
+
+				strcpy(readBuffer, readComm);
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler im 							Spielverlauf: Fehler bei wait!");
+	
+				char *waitack = "OKWAIT\n";
+				send(sock, waitack, strlen(waitack), 0);
+
+				break;
+
+		case 'G': /* GAMEOVER */
+	
+				char *winnerNrandName = malloc(BUFFER);
+	
+				strcpy(winnerNrandName, readComm);
+				printf("S: %s", winnerNrandName);
+				error(winnerNrandName[0], "Fehler im 						Spielverlauf: Spielernummer und 							Spielername des Gewinners kann nicht 						festgelegt werden!");
+					
+				for ( i = 0; i < BUFFER; i++) {
+	  recv(sock, &piecesToHit[i], 1, 0);
+          if (piecesToHit[i] == '\n') break;
+	}
+
+				printf("S: %s", piecesToHit);
+				error(piecesToHit[0], "Fehler im 						Spielverlauf: 
+				Anzahl zu schlagender Steine kann nicht 					festgelegt werden!");
+				
+				for ( i = 0; i < BUFFER; i++) {
+	  recv(sock, &playerCountpiecesCount[i], 1, 0);
+          if (playerCountpiecesCount[i] == '\n') break;
+	}
+
+				printf("S: %s", playerCountpiecesCount);
+				error(playerCountpiecesCount[0], "Fehler 					im Spielverlauf: Anzahl der Spieler und 					Steine kann nicht festgelegt werden!");
+	
+				for(int o = 0; o < playerCount; o++) {
+				for(int p = 0; p < piecesCount; p++) {
+		
+					for ( i = 0; i < BUFFER; i++) {
+	  recv(sock, &readBuffer[i], 1, 0);
+          if (readBuffer[i] == '\n') break;
+	}
+
+					printf("S: %s", readBuffer);
+					error(readBuffer[0], "Fehler 							im Spielverlauf: Anzahl der Spieler 						und Steine kann nicht festgelegt 						werden!");
+
+				}}
+
+				for ( i = 0; i < BUFFER; i++) {
+	  recv(sock, &readBuffer[i], 1, 0);
+          if (readBuffer[i] == '\n') break;
+	}
+
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler im 							Spielverlauf: Ausgabe der Liste der 						Spielernummer, Steinnummer und Position 					kann nicht korrekt abgeschlossen 						werden!");
+
+				for ( i = 0; i < BUFFER; i++) {
+	  recv(sock, &readBuffer[i], 1, 0);
+          if (readBuffer[i] == '\n') break;
+	}
+
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler im 							Spielverlauf: 
+				TCP-Verbindung konnte nicht korrekt 						abgebaut werden???");
+
+				
+				testLoop = 0;
+				break;
+				
+		
+
+		default: /* - Fehlermeldung */
+			error(readComm[0], "Fehler im 							Spielverlauf: Fehler beim Lesen des Befehls!");
+
+	} 
+
+}
+
   
  	//------SHM------// 
  	char *strdel = strtok(playerNrAndName, "+ YOU"); 
