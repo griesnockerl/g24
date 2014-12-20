@@ -210,6 +210,8 @@ switch(readComm[2]) {
 				piecesCount = atoi(piecCount);
 				prtinf("%d\n", pieCount);
 
+				int o, p;
+
 				for(o = 0; o < playerCount; o++) {
 				for(p = 0; p < piecesCount; p++) {
 					free(readBuffer);
@@ -269,7 +271,7 @@ switch(readComm[2]) {
 				printf("S: %s", playerCountpiecesCount);
 				error(playerCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
 	
-				int o, p;
+				
 				for(o = 0; o < playerCount; o++) {
 				for(p = 0; p < piecesCount; p++) {
 		
