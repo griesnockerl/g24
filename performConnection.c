@@ -343,7 +343,7 @@ switch(readComm[2]) {
 				break;
 				
 		
-*/
+
 		default:  /*- Fehlermeldung */
 				error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
 				break;
