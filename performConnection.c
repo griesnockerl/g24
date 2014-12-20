@@ -250,6 +250,22 @@ switch(readComm[2]) {
 				error(readBuffer[0], "Fehler im Spielverlauf: Spielverlaufphase kann nicht abgeschlossen werden!");
 				
 				
+				
+				/* SPIELZUG
+				thinker soll dann berechnen .. etc s. M3-2. dann muss noch fehlermeldung falls spielzug ungueltig ist rein. 
+				send(sock, ? , ? , 0);
+				printf("C: %s", );
+				free(readBuffer);
+				readBuffer = malloc(BUFFER);	
+				for ( i = 0; i < BUFFER; i++) {
+				  recv(sock, &readBuffer[i], 1, 0);
+        			  if (readBuffer[i] == '\n') break;
+				}
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler beim Spielzug!"); */
+				
+				
+				
 				free(readComm);
 				
 				break; 
@@ -262,11 +278,12 @@ switch(readComm[2]) {
 	
 				char *waitack = "OKWAIT\n";
 				send(sock, waitack, strlen(waitack), 0);
+				printf("C: %s", waitack);
 
 				free(readComm);
 				break;
 
-	/*	case 'G':  GAMEOVER 
+		case 'G':  GAMEOVER 
 				
 				playerCountpiecesCount = malloc(BUFFER);
 				winnerNrandName = malloc(BUFFER);
@@ -276,17 +293,17 @@ switch(readComm[2]) {
 				error(winnerNrandName[0], "Fehler im Spielverlauf: Spielernummer und Spielername des Gewinners kann nicht festgelegt werden!");
 				
 				for ( i = 0; i < BUFFER; i++) {
-	  recv(sock, &piecesToHit[i], 1, 0);
-          if (piecesToHit[i] == '\n') break;
-	}
+	  				recv(sock, &piecesToHit[i], 1, 0);
+        				if (piecesToHit[i] == '\n') break;
+				}
 
 				printf("S: %s", piecesToHit);
 				error(piecesToHit[0], "Fehler im Spielverlauf: 	Anzahl zu schlagender Steine kann nicht festgelegt werden!");
 				
 				for ( i = 0; i < BUFFER; i++) {
-	  recv(sock, &playerCountpiecesCount[i], 1, 0);
-          if (playerCountpiecesCount[i] == '\n') break;
-	}
+					recv(sock, &playerCountpiecesCount[i], 1, 0);
+          				if (playerCountpiecesCount[i] == '\n') break;
+				}
 
 				printf("S: %s", playerCountpiecesCount);
 				error(playerCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
@@ -296,9 +313,9 @@ switch(readComm[2]) {
 				for(p = 0; p < piecesCount; p++) {
 		
 					for ( i = 0; i < BUFFER; i++) {
-	  recv(sock, &readBuffer[i], 1, 0);
-          if (readBuffer[i] == '\n') break;
-	}
+	  				recv(sock, &readBuffer[i], 1, 0);
+          				if (readBuffer[i] == '\n') break;
+					}
 
 					printf("S: %s", readBuffer);
 					error(readBuffer[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
@@ -306,17 +323,17 @@ switch(readComm[2]) {
 				}}
 
 				for ( i = 0; i < BUFFER; i++) {
-	  recv(sock, &readBuffer[i], 1, 0);
-          if (readBuffer[i] == '\n') break;
-	}
+	  				recv(sock, &readBuffer[i], 1, 0);
+        				if (readBuffer[i] == '\n') break;
+				}
 
 				printf("S: %s", readBuffer);
 				error(readBuffer[0], "Fehler im Spielverlauf: Ausgabe der Liste der Spielernummer, Steinnummer und Position kann nicht korrekt abgeschlossen werden!");
 
 				for ( i = 0; i < BUFFER; i++) {
-	  recv(sock, &readBuffer[i], 1, 0);
-          if (readBuffer[i] == '\n') break;
-	}
+	  				recv(sock, &readBuffer[i], 1, 0);
+          				if (readBuffer[i] == '\n') break;
+				}
 
 				printf("S: %s", readBuffer);
 				error(readBuffer[0], "Fehler im Spielverlauf: TCP-Verbindung konnte nicht korrekt abgebaut werden???");
@@ -328,8 +345,8 @@ switch(readComm[2]) {
 		
 */
 		default:  /*- Fehlermeldung */
-			error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
-			break;
+				error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
+				break;
 	} 
 
 } 
