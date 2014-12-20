@@ -209,12 +209,12 @@ switch(readComm[2]) {
 		case 'G': /* GAMEOVER */
 				
 				playerCountpiecesCount = malloc(BUFFER);
-				winnerNrandName = malloc(BUFFER);
+			/*	winnerNrandName = malloc(BUFFER);
 	
 				strcpy(winnerNrandName, readComm);
 				printf("S: %s", winnerNrandName);
 				error(winnerNrandName[0], "Fehler im Spielverlauf: Spielernummer und Spielername des Gewinners kann nicht festgelegt werden!");
-					
+					*/
 				for ( i = 0; i < BUFFER; i++) {
 	  recv(sock, &piecesToHit[i], 1, 0);
           if (piecesToHit[i] == '\n') break;
