@@ -236,7 +236,18 @@ switch(readComm[2]) {
 				printf("S: %s", readBuffer);
 				error(readBuffer[0], "Fehler im Spielverlauf: Ausgabe der Liste der Spielernummer, Steinnummer und Position kann nicht korrekt abgeschlossen werden!");
 
-				
+				char *think = "THINKING\n";
+				send(sock, think, strlen(think), 0);
+				printf("C: %s", think);
+
+				free(readBuffer);
+				readBuffer = malloc(BUFFER);	
+				for ( i = 0; i < BUFFER; i++) {
+				  recv(sock, &readBuffer[i], 1, 0);
+        			  if (readBuffer[i] == '\n') break;
+				}
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler im Spielverlauf: Spielverlaufphase kann nicht abgeschlossen werden!");
 				
 				
 				free(readComm);
