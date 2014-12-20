@@ -256,8 +256,7 @@ switch(readComm[2]) {
 	}
 
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im 							Spielverlauf: 
-				TCP-Verbindung konnte nicht korrekt 						abgebaut werden???");
+				error(readBuffer[0], "Fehler im Spielverlauf: TCP-Verbindung konnte nicht korrekt abgebaut werden???");
 
 				
 				testLoop = 0;
@@ -266,7 +265,7 @@ switch(readComm[2]) {
 		
 
 		default: /* - Fehlermeldung */
-			error(readComm[0], "Fehler im 							Spielverlauf: Fehler beim Lesen des Befehls!");
+			error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
 			break;
 	} 
 
