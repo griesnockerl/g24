@@ -72,7 +72,7 @@
 	}
      printf("S: %s", readBuffer); 
   
-     error(readBuffer[0], "Fehler im Prolog: Client version wird nicht  akzeptiert!"); 
+     error(readBuffer[0], "Fehler im Prolog: Client version wird nicht akzeptiert!"); 
   	
      //Send game id 
      char id[] = "ID "; 
@@ -89,12 +89,9 @@
 	}
      printf("S: %s", gameKindName); 
      
-     char *strGarbage1;
-     strGarbage1 = malloc(BUFFER);
-	strGarbage1 = strtok(gameKindName, " ");
-	strGarbage1 = strtok(NULL, " ");
-	gameKindName = strtok(NULL, "\n");
-	if(!(gameKindName == "NMMorris")) {
+     char *morris = "NMMorris";
+     
+     if((strstr(gameKindName, "NMMorris")) == NULL) {
 		printf("Fehler: Client kann nur Mühle spielen! Erwarte NMMorris als Spiel!");
 		exit(1);
 	}
