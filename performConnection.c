@@ -206,7 +206,7 @@ switch(readComm[2]) {
 				break;
 
 		case 'G': /* GAMEOVER */
-	
+				char *playerCountpiecesCount = malloc(BUFFFER);
 				char *winnerNrandName = malloc(BUFFER);
 	
 				strcpy(winnerNrandName, readComm);
