@@ -125,9 +125,10 @@ for ( i = 0; i < BUFFER; i++) {
      error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!"); 
 
 
-for ( i = 0; i < BUFFER; i++) {
+for ( i = 0; i < BUFFER - 1; i++) {
 	  recv(sock, &readBuffer[i], 1, 0);
-          if (readBuffer[i] == '\n') break;
+          if (readBuffer[i] == '\n') 
+          	readBuffer[i+1] = '\0';	break;
 	}
 printf("S: %s", readBuffer);
 	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
