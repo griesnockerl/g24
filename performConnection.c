@@ -150,7 +150,7 @@ for ( i = 0; i < BUFFER - 1; i++) {
 printf("S: %s", readBuffer);
 	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
 /*
----------------SPIELVERLAUF-------------- 
+---------------SPIELVERLAUF-------------- */
 	char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount, *playerNamepieceNrAndPos;
 	char *playerCountpiecesCount, winnerNrandName;
 	int testLoop = 1;
@@ -167,7 +167,7 @@ while(testLoop) {
 
 switch(readComm[2]) {
 
-		case 'M':  MOVE 
+		case 'M': /*  MOVE */
 				
 		
 				maxTimeforMove = malloc(BUFFER);
@@ -213,7 +213,7 @@ switch(readComm[2]) {
 			
 				break; 
 		
-		case 'W':  WAIT 
+		case 'W': /* WAIT */
 
 				strcpy(readBuffer, readComm);
 				printf("S: %s", readBuffer);
@@ -224,7 +224,7 @@ switch(readComm[2]) {
 
 				break;
 
-		case 'G':  GAMEOVER 
+		case 'G': /* GAMEOVER */
 				
 				playerCountpiecesCount = malloc(BUFFER);
 				winnerNrandName = malloc(BUFFER);
@@ -285,12 +285,12 @@ switch(readComm[2]) {
 				
 		
 
-		default:  - Fehlermeldung 
+		default:  /*- Fehlermeldung */
 			error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
 			break;
 	} 
 
-} */
+} 
 
   
  	//------SHM------// 
