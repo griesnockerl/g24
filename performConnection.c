@@ -132,6 +132,16 @@ for ( i = 0; i < BUFFER - 1; i++) {
           	break;
 	}
 printf("S: %s", readBuffer);
+	error(readBuffer[0], "Fehler im Prolog: Spielernr, Name und Zustand, kann nicht ausgegeben werden! ");
+	
+	free(readBuffer);
+readBuffer = malloc(BUFFER);
+for ( i = 0; i < BUFFER - 1; i++) {
+	  recv(sock, &readBuffer[i], 1, 0);
+          if (readBuffer[i] == '\n') 
+          	break;
+	}
+printf("S: %s", readBuffer);
 	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
 /*
 ---------------SPIELVERLAUF-------------- 
