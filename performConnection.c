@@ -123,7 +123,7 @@ for ( i = 0; i < BUFFER; i++) {
      printf("S: %s", playerTotalCount); 
   
      error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!"); 
-/*
+
 
 for ( i = 0; i < BUFFER; i++) {
 	  recv(sock, &readBuffer[i], 1, 0);
@@ -131,7 +131,7 @@ for ( i = 0; i < BUFFER; i++) {
 	}
 printf("S: %s", readBuffer);
 	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
-
+/*
 ---------------SPIELVERLAUF-------------- 
 	char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount, *playerNamepieceNrAndPos;
 	char *playerCountpiecesCount, winnerNrandName;
