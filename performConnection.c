@@ -283,7 +283,7 @@ switch(readComm[2]) {
 				free(readComm);
 				break;
 
-		case 'G':  GAMEOVER 
+		case 'G': /* GAMEOVER */
 				
 				playerCountpiecesCount = malloc(BUFFER);
 				winnerNrandName = malloc(BUFFER);
