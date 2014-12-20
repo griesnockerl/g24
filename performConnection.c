@@ -206,9 +206,9 @@ switch(readComm[2]) {
 				
 				/* Vars aus Gamedetails werden geschrieben */
 				playerCount = atoi(playCount);
-				printf("%d\n", playerCount)
+				printf("%d\n", playerCount);
 				piecesCount = atoi(piecCount);
-				prtinf("%d\n", piecesCount);
+				printf("%d\n", piecesCount);
 
 				int o, p;
 
