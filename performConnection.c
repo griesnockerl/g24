@@ -89,7 +89,7 @@
 	}
      printf("S: %s", gameKindName); 
      
-     if((strstr(gameKindName, "blablub")) == NULL) {
+     if((strstr(gameKindName, "NMMorris")) == NULL) {
 		printf("Fehler: Client kann nur Mühle spielen! Erwarte NMMorris als Spiel!");
 		exit(1);
 	}
