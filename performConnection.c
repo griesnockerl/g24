@@ -181,8 +181,8 @@ switch(readComm[2]) {
 				char *piecCount = malloc(sizeof(char));
 				char *strgarbage2 = malloc(BUFFER);
 
-				strgarbage2 = strtok									(playersCountpiecesCount, " ,");
-				strgarbage2 = strtok									(NULL, " ,");
+				strgarbage2 = strtok(playersCountpiecesCount, " ,");
+				strgarbage2 = strtok(NULL, " ,");
 				playCount = strtok(NULL, " ,");
 				piecCount = strtok(NULL, " ,");
 				
