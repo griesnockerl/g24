@@ -132,7 +132,7 @@ for ( i = 0; i < BUFFER; i++) {
 printf("S: %s", readBuffer);
 	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
 
-/*---------------SPIELVERLAUF-------------- *
+/*---------------SPIELVERLAUF-------------- */
 	
 	int testLoop = 1;
 
@@ -219,7 +219,7 @@ switch(readComm[2]) {
 
 
 				/* anfang fuer SHM2 for PIECELIST, der Shm 				, größe gemäß anzahl der steine und 						spieler allociieren. */ 
-
+				/*
 				int shm_id2 = shmget(IPC_PRIVATE, sizeof					(?), IPC_CREAT | 0666);
 					
 				int *shmptr = (int *) shmat(shm_id, NULL, 					0);
@@ -237,7 +237,7 @@ switch(readComm[2]) {
     				}
 				
 				/* Ende SHM 2 	*/
-	
+				/*
 
 				recv(sock, readBuffer, BUFFER, 0);
 				printf("S: %s", readBuffer);
@@ -254,13 +254,14 @@ switch(readComm[2]) {
 				/* SPIELZUG */
 
 				/* thinker soll dann berechnen .. etc s. 					M3-2. dann muss noch fehlermeldung falls 					spielzug ungueltig ist rein. */
-				send(sock, ? , ? , 0);
+			/*	send(sock, ? , ? , 0);
 				printf("C: %s", );
 				recv(sock, readBuffer, BUFFER, 0);
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler beim 						Spielzug!");
+				error(readBuffer[0], "Fehler beim */						Spielzug!");
+				
 			
-				break; */
+				break; 
 		
 		case 'W': /* WAIT */
 
@@ -336,7 +337,7 @@ switch(readComm[2]) {
 
 		default: /* - Fehlermeldung */
 			error(readComm[0], "Fehler im 							Spielverlauf: Fehler beim Lesen des Befehls!");
-
+			break;
 	} 
 
 }
