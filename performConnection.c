@@ -229,8 +229,9 @@ switch(readComm[2]) {
 				printf("S: %s", playerCountpiecesCount);
 				error(playerCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
 	
-				for(int o = 0; o < playerCount; o++) {
-				for(int p = 0; p < piecesCount; p++) {
+				int o, p;
+				for(o = 0; o < playerCount; o++) {
+				for(p = 0; p < piecesCount; p++) {
 		
 					for ( i = 0; i < BUFFER; i++) {
 	  recv(sock, &readBuffer[i], 1, 0);
