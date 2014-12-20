@@ -149,12 +149,12 @@ while(testLoop) {
 switch(readComm[2]) {
 
 		case 'M': /* MOVE */
-				char *maxTimeforMove, *piecesToHit, 						*playersCountpiecesCount, 								*playerNamepieceNrAndPos;
+				char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount, *playerNamepieceNrAndPos;
 		
 				maxTimeforMove = malloc(BUFFER);
 				strcpy(maxTimeforMove, readComm);
 				printf("S: %s", maxTimeforMove);
-				error(maxTimeforMove[0], "Fehler im 						Spielverlauf: Maximale Zugzeit kann nicht 					festgelegt werden!");
+				error(maxTimeforMove[0], "Fehler im Spielverlauf: Maximale Zugzeit kann nicht festgelegt werden!");
 				maxTimeMove = atoi(maxTimeforMove);
 
 				piecesToHit = malloc(BUFFER);
@@ -164,7 +164,7 @@ switch(readComm[2]) {
 	}
 
 				printf("S: %s", piecesToHit);
-				error(piecesToHit[0], "Fehler im 						Spielverlauf: Anzahl zu schlagender Steine 				kann nicht festgelegt werden!");
+				error(piecesToHit[0], "Fehler im Spielverlauf: Anzahl zu schlagender Steine kann nicht festgelegt werden!");
 				remainToHit = atoi(piecesToHit);
 				
 				playersCountpiecesCount = malloc(BUFFER);
@@ -174,7 +174,7 @@ switch(readComm[2]) {
 	}
 
 				printf("S: %s", playersCountpiecesCount);
-				error(playersCountpiecesCount[0], "Fehler 					im Spielverlauf: Anzahl der Spieler und 					Anzahl der Steine kann nicht festgelegt 					werden!");
+				error(playersCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Anzahl der Steine kann nicht festgelegt werden!");
 				
 				char *playCount = malloc(sizeof(char));
 				char *piecCount = malloc(sizeof(char));
@@ -198,7 +198,7 @@ switch(readComm[2]) {
 
 				strcpy(readBuffer, readComm);
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im 							Spielverlauf: Fehler bei wait!");
+				error(readBuffer[0], "Fehler im Spielverlauf: Fehler bei wait!");
 	
 				char *waitack = "OKWAIT\n";
 				send(sock, waitack, strlen(waitack), 0);
@@ -211,7 +211,7 @@ switch(readComm[2]) {
 	
 				strcpy(winnerNrandName, readComm);
 				printf("S: %s", winnerNrandName);
-				error(winnerNrandName[0], "Fehler im 						Spielverlauf: Spielernummer und 							Spielername des Gewinners kann nicht 						festgelegt werden!");
+				error(winnerNrandName[0], "Fehler im Spielverlauf: Spielernummer und Spielername des Gewinners kann nicht festgelegt werden!");
 					
 				for ( i = 0; i < BUFFER; i++) {
 	  recv(sock, &piecesToHit[i], 1, 0);
@@ -219,8 +219,7 @@ switch(readComm[2]) {
 	}
 
 				printf("S: %s", piecesToHit);
-				error(piecesToHit[0], "Fehler im 						Spielverlauf: 
-				Anzahl zu schlagender Steine kann nicht 					festgelegt werden!");
+				error(piecesToHit[0], "Fehler im Spielverlauf: 	Anzahl zu schlagender Steine kann nicht festgelegt werden!");
 				
 				for ( i = 0; i < BUFFER; i++) {
 	  recv(sock, &playerCountpiecesCount[i], 1, 0);
@@ -228,7 +227,7 @@ switch(readComm[2]) {
 	}
 
 				printf("S: %s", playerCountpiecesCount);
-				error(playerCountpiecesCount[0], "Fehler 					im Spielverlauf: Anzahl der Spieler und 					Steine kann nicht festgelegt werden!");
+				error(playerCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
 	
 				for(int o = 0; o < playerCount; o++) {
 				for(int p = 0; p < piecesCount; p++) {
@@ -239,7 +238,7 @@ switch(readComm[2]) {
 	}
 
 					printf("S: %s", readBuffer);
-					error(readBuffer[0], "Fehler 							im Spielverlauf: Anzahl der Spieler 						und Steine kann nicht festgelegt 						werden!");
+					error(readBuffer[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
 
 				}}
 
@@ -249,7 +248,7 @@ switch(readComm[2]) {
 	}
 
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im 							Spielverlauf: Ausgabe der Liste der 						Spielernummer, Steinnummer und Position 					kann nicht korrekt abgeschlossen 						werden!");
+				error(readBuffer[0], "Fehler im Spielverlauf: Ausgabe der Liste der Spielernummer, Steinnummer und Position kann nicht korrekt abgeschlossen werden!");
 
 				for ( i = 0; i < BUFFER; i++) {
 	  recv(sock, &readBuffer[i], 1, 0);
