@@ -13,7 +13,7 @@
      if(errorCode == '-') 
      { 
          perror(msg); 
-         exit(0); 
+         exit(1); 
      } 
  } 
   
@@ -25,13 +25,13 @@
      if (sock < 0) 
      { 
          perror("Client: Socket fehler!\n"); 
-         exit(0); 
+         exit(1); 
      } 
   
      if(host == NULL) 
      { 
          perror("Server nicht gefunden!\n"); 
-         exit(0); 
+         exit(1); 
      } 
      
      memset(&server, 0, sizeof(server)); 
@@ -42,7 +42,7 @@
      if(connect(sock, (struct sockaddr *)&server, sizeof(struct sockaddr)) < 0) 
      { 
         perror("Verbindungsaufbau zum Game-Server fehlgeschlagen!"); 
-         exit(0); 
+         exit(1); 
     } 
      /*---------------PROLOG-------------- */ 
      char *readBuffer, *gameServerVersion, *gameKindName, *gameName, *playerNrAndName, *playerTotalCount; 
@@ -179,8 +179,8 @@ switch(readComm[2]) {
 				piecesToHit = malloc(BUFFER);
 				for ( i = 0; i < BUFFER; i++) {
 	 			 recv(sock, &piecesToHit[i], 1, 0);
-          if (piecesToHit[i] == '\n') break;
-	}
+          			if (piecesToHit[i] == '\n') break;
+				}
 
 				printf("S: %s", piecesToHit);
 				error(piecesToHit[0], "Fehler im Spielverlauf: Anzahl zu schlagender Steine kann nicht festgelegt werden!");
@@ -188,9 +188,9 @@ switch(readComm[2]) {
 				
 				playersCountpiecesCount = malloc(BUFFER);
 				for ( i = 0; i < BUFFER; i++) {
-	  recv(sock, &playersCountpiecesCount[i], 1, 0);
-          if (playersCountpiecesCount[i] == '\n') break;
-	}
+				  recv(sock, &playersCountpiecesCount[i], 1, 0);
+        			  if (playersCountpiecesCount[i] == '\n') break;
+				}
 
 				printf("S: %s", playersCountpiecesCount);
 				error(playersCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Anzahl der Steine kann nicht festgelegt werden!");
@@ -206,8 +206,28 @@ switch(readComm[2]) {
 				
 				/* Vars aus Gamedetails werden geschrieben */
 				playerCount = atoi(playCount);
+				printf("%d\n", playerCount)
 				piecesCount = atoi(piecCount);
+				prtinf("%d\n", pieCount);
 
+				for(o = 0; o < playerCount; o++) {
+				for(p = 0; p < piecesCount; p++) {
+					free(readBuffer);
+					readBuffer = malloc(BUFFER);
+					for ( i = 0; i < BUFFER; i++) {
+	  					recv(sock, &readBuffer[i], 1, 0);
+          					if (readBuffer[i] == '\n') break;
+					}
+
+					printf("S: %s", readBuffer);
+					error(readBuffer[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
+
+				}}
+
+				
+				
+				
+				
 				
 			
 			
