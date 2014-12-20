@@ -89,12 +89,12 @@
 	}
      printf("S: %s", gameKindName); 
      
-     char *morris = "NMMorris";
-     
-     if((strstr(gameKindName, "NMMorris")) == NULL) {
+     if((strstr(gameKindName, "blablub")) == NULL) {
 		printf("Fehler: Client kann nur Mühle spielen! Erwarte NMMorris als Spiel!");
 		exit(1);
 	}
+	
+	 error(gameKindName[0], "Fehler im Prolog: Art des Spiels kann nicht festgelegt werden!"); 	
 	
      gameName = malloc(BUFFER);
  for ( i = 0; i < BUFFER; i++) {
@@ -103,7 +103,6 @@
 	}
     printf("S: %s", gameName); 
   
-     error(gameKindName[0], "Fehler im Prolog: Art des Spiels kann nicht festgelegt werden!"); 
      error(gameName[0], "Fehler im Prolog: Spielname kann nicht festgelegt werden!"); 
   
      //Send playernumber,at first it must be empty 
