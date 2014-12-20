@@ -102,7 +102,7 @@
      //Send playernumber,at first it must be empty 
      char *sendPlayerNr = "PLAYER\n"; 
      send(sock, sendPlayerNr, strlen(sendPlayerNr), 0); 
-    printf("C %s", sendPlayerNr); 
+    printf("C: %s", sendPlayerNr); 
   
      //Server send Player info: number, name, totalcount 
      playerNrAndName = malloc(BUFFER);
