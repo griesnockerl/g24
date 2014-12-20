@@ -1,4 +1,4 @@
-ifndef gameDetails
+#ifndef gameDetails
 #define gameDetails
 
 static char *playerName;
