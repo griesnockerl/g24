@@ -93,7 +93,7 @@
      strGarbage1 = malloc(BUFFER);
 	strGarbage1 = strtok(gameKindName, " ");
 	strGarbage1 = strtok(NULL, " ");
-	gameKindName = strtok(NULL, " ");
+	gameKindName = strtok(NULL, "\n");
 	if(!(gameKindName == "NMMorris")) {
 		printf("Fehler: Client kann nur Mühle spielen! Erwarte NMMorris als Spiel!");
 		exit(1);
