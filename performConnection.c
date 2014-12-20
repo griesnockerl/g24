@@ -204,7 +204,7 @@ switch(readComm[2]) {
 				playCount = strtok(NULL, " ,");
 				piecCount = strtok(NULL, " ,");
 				
-				 Vars aus Gamedetails werden geschrieben
+				/* Vars aus Gamedetails werden geschrieben */
 				playerCount = atoi(playCount);
 				piecesCount = atoi(piecCount);
 
@@ -224,7 +224,7 @@ switch(readComm[2]) {
 
 				break;
 
-		case 'G': /* GAMEOVER */
+	/*	case 'G':  GAMEOVER 
 				
 				playerCountpiecesCount = malloc(BUFFER);
 				winnerNrandName = malloc(BUFFER);
@@ -284,7 +284,7 @@ switch(readComm[2]) {
 				break;
 				
 		
-
+*/
 		default:  /*- Fehlermeldung */
 			error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
 			break;
