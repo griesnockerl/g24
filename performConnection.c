@@ -152,12 +152,13 @@ printf("S: %s", readBuffer);
 /*
 ---------------SPIELVERLAUF-------------- */
 	char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount, *playerNamepieceNrAndPos;
-	char *playerCountpiecesCount, winnerNrandName;
+	char *playerCountpiecesCount, *winnerNrandName;
 	int testLoop = 1;
-
+	char *readComm;
+	
 while(testLoop) {	
 
-		char *readComm = malloc(BUFFER);
+		readComm = malloc(BUFFER);
 		for ( i = 0; i < BUFFER; i++) {
 	  		recv(sock, &readComm[i], 1, 0);
           if (readComm[i] == '\n') break;
@@ -226,13 +227,20 @@ switch(readComm[2]) {
 
 				}}
 
+				free(readBuffer);
+				readBuffer = malloc(BUFFER);
+				for ( i = 0; i < BUFFER; i++) {
+				  recv(sock, &readBuffer[i], 1, 0);
+        			  if (readBuffer[i] == '\n') break;
+				}
+				printf("S: %s", readBuffer);
+				error(readBuffer[0], "Fehler im Spielverlauf: Ausgabe der Liste der Spielernummer, Steinnummer und Position kann nicht korrekt abgeschlossen werden!");
+
 				
 				
 				
+				free(readComm);
 				
-				
-			
-			
 				break; 
 		
 		case 'W': /* WAIT */
@@ -244,6 +252,7 @@ switch(readComm[2]) {
 				char *waitack = "OKWAIT\n";
 				send(sock, waitack, strlen(waitack), 0);
 
+				free(readComm);
 				break;
 
 	/*	case 'G':  GAMEOVER 
@@ -301,7 +310,7 @@ switch(readComm[2]) {
 				printf("S: %s", readBuffer);
 				error(readBuffer[0], "Fehler im Spielverlauf: TCP-Verbindung konnte nicht korrekt abgebaut werden???");
 
-				
+				free(readComm);
 				testLoop = 0;
 				break;
 				
