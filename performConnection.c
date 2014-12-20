@@ -190,76 +190,7 @@ switch(readComm[2]) {
 				piecesCount = atoi(piecCount);
 
 				
-				char **piecelist;
-				piecelist = malloc(playerCount * sizeof					(int *));
-				char *help = malloc(BUFFER);
-			/*	char *playNr = malloc(sizeof(char));
-				char *stoneNr = malloc(sizeof(char));
-				char *stonePos = malloc(2 * sizeof(char)); 				*/
-/*
-				for (int m = 0; m < playerCount; m++) {
-
-					piecelist[m] = malloc(piecesCount * 						sizeof(?));
-
-				for (int k = 0; k < piecesCount; k++) {
-
-					recv(sock, readBuffer, BUFFER, 0);
-					printf("S: %s", readBuffer);
-					error(readBuffer[0], "Fehler im 							Spielverlauf: Fehler beim ausgeben 						der Spielernummer, Steinnummer und 						Position!");
 			
-					/* trenne readBuffer auf , und 							extrahiere die werte als variablen, 						diese dann in piecelist array 							speichern, damit sie später in SHM */
-
-				/*	help = strtok(readBuffer, ".");
-					strncpy(
-					
-					piecelist[m][k] = ...	*/
-			
-				}
-				}
-
-
-				/* anfang fuer SHM2 for PIECELIST, der Shm 				, größe gemäß anzahl der steine und 						spieler allociieren. */ 
-				/*
-				int shm_id2 = shmget(IPC_PRIVATE, sizeof					(?), IPC_CREAT | 0666);
-					
-				int *shmptr = (int *) shmat(shm_id, NULL, 					0);
-
-				if (shm_id < 0)
-				{
-				fprintf(stderr, "Fehler bei shmget().\n");
-				return EXIT_FAILURE;
-				}
-
-				if (*shmptr == -1)
-				{
-				fprintf(stderr, "Fehler bei shmat().\n");
-				return EXIT_FAILURE;
-    				}
-				
-				/* Ende SHM 2 	*/
-				/*
-
-				recv(sock, readBuffer, BUFFER, 0);
-				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im 							Spielverlauf: Ausgabe der Liste der 						Spielernummer, Steinnummer und Position 					kann nicht korrekt abgeschlossen 						werden!");
-
-				char *think = "THINKING\n";
-				send(sock, think, strlen(think), 0);
-				printf("C: %s", think);
-
-				recv(sock, readBuffer, BUFFER, 0);
-				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im 							Spielverlauf: Spielverlaufphase kann nicht 				abgeschlossen werden!");
-
-				/* SPIELZUG */
-
-				/* thinker soll dann berechnen .. etc s. 					M3-2. dann muss noch fehlermeldung falls 					spielzug ungueltig ist rein. */
-			/*	send(sock, ? , ? , 0);
-				printf("C: %s", );
-				recv(sock, readBuffer, BUFFER, 0);
-				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler beim */						Spielzug!");
-				
 			
 				break; 
 		
