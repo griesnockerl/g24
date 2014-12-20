@@ -208,7 +208,7 @@ switch(readComm[2]) {
 				playerCount = atoi(playCount);
 				printf("%d\n", playerCount)
 				piecesCount = atoi(piecCount);
-				prtinf("%d\n", pieCount);
+				prtinf("%d\n", piecesCount);
 
 				int o, p;
 
