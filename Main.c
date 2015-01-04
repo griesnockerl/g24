@@ -89,7 +89,7 @@ int main(int argc, const char *argv[])
 		return EXIT_FAILURE; 
 	} else if (pid == 0) {
 	/* Connector */
-		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname);
+		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
 		strcpy(game.playerName, playerName);
 		game.playerTotalCount = playerCount;
 		game.playerNumber = playerNumber;
@@ -107,6 +107,9 @@ int main(int argc, const char *argv[])
 				fprintf(stderr, "Fehler bei shmctl().\n");
 				return EXIT_FAILURE;
 			}
+			shmdt((void *) shmptr);
+			shmctl(shm_id,IPC_RMID,NULL);
+
 			return EXIT_SUCCESS;
 		}
 	}
