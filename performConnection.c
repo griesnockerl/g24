@@ -17,7 +17,7 @@
      } 
  } 
   
- void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME) 
+ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME, int shmem[]) 
  {
      struct sockaddr_in server; 
      struct hostent *host = gethostbyname(HOSTNAME); 
