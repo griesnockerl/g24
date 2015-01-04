@@ -1,12 +1,16 @@
 #ifndef gameDetails
 #define gameDetails
 
-static char *playerName;
-static int playerCount;
-static int playerNumber;
-static int piecesCount;
-static int maxTimeMove;
-static int remainToHit;
+struct shm{
+	char *playerName;
+	int playerCount;
+	int playerNumber;
+	int piecesCount;
+	int maxTimeMove;
+	int remainToHit;
+	int ppid;
+	int pid;
+};
 
 
 #endif

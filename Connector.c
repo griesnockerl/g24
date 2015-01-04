@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
-
+#include "gameDetails.h"
 #include "performConnection.c"
 
-int setupConnection(char *gameID, char *hostname, uint16_t portnumber, char *gamekindname, int shmem[])
+int setupConnection(char *gameID, char *hostname, uint16_t portnumber, char *gamekindname, struct shm *ptr)
 {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock < 0)
@@ -13,7 +13,7 @@ int setupConnection(char *gameID, char *hostname, uint16_t portnumber, char *gam
         return EXIT_FAILURE;
     }
 
-    performConnection(sock, gameID, hostname, portnumber, gamekindname, shmem);
+    performConnection(sock, gameID, hostname, portnumber, gamekindname, ptr);
 
    return EXIT_SUCCESS;
 }

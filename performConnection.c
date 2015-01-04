@@ -16,8 +16,8 @@
          exit(1); 
      } 
  } 
-  
- void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME, int shmem[]) 
+ 
+ void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME, struct shm *shmptr) 
  {
      struct sockaddr_in server; 
      struct hostent *host = gethostbyname(HOSTNAME); 
@@ -175,7 +175,7 @@ switch(readComm[2]) {
 				strcpy(maxTimeforMove, readComm);
 				printf("S: %s", maxTimeforMove);
 				error(maxTimeforMove[0], "Fehler im Spielverlauf: Maximale Zugzeit kann nicht festgelegt werden!");
-				maxTimeMove = atoi(maxTimeforMove);
+				shmptr->maxTimeMove = atoi(maxTimeforMove);
 
 				piecesToHit = malloc(BUFFER);
 				for ( i = 0; i < BUFFER; i++) {
@@ -185,7 +185,7 @@ switch(readComm[2]) {
 
 				printf("S: %s", piecesToHit);
 				error(piecesToHit[0], "Fehler im Spielverlauf: Anzahl zu schlagender Steine kann nicht festgelegt werden!");
-				remainToHit = atoi(piecesToHit);
+				shmptr->remainToHit = atoi(piecesToHit);
 				
 				playersCountpiecesCount = malloc(BUFFER);
 				for ( i = 0; i < BUFFER; i++) {
@@ -206,15 +206,15 @@ switch(readComm[2]) {
 				piecCount = strtok(NULL, " ,");
 				
 				/* Vars aus Gamedetails werden geschrieben */
-				playerCount = atoi(playCount);
+				shmptr->playerCount = atoi(playCount);
 				
-				piecesCount = atoi(piecCount);
+				shmptr->piecesCount = atoi(piecCount);
 				
 
 				int o, p;
 
-				for(o = 0; o < playerCount; o++) {
-				for(p = 0; p < piecesCount; p++) {
+				for(o = 0; o < shmptr->playerCount; o++) {
+				for(p = 0; p < shmptr->piecesCount; p++) {
 					free(readBuffer);
 					readBuffer = malloc(BUFFER);
 					for ( i = 0; i < BUFFER; i++) {
@@ -309,8 +309,8 @@ switch(readComm[2]) {
 				error(playerCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
 	
 				
-				for(o = 0; o < playerCount; o++) {
-				for(p = 0; p < piecesCount; p++) {
+				for(o = 0; o < shmptr->playerCount; o++) {
+				for(p = 0; p < shmptr->piecesCount; p++) {
 		
 					for ( i = 0; i < BUFFER; i++) {
 	  				recv(sock, &readBuffer[i], 1, 0);
@@ -362,7 +362,7 @@ switch(readComm[2]) {
  	strcpy(pname, strdel); 
   
  	//init vars in gameDetails.h 
- 	strcpy(playerName, pname); 
- 	playerNumber = atoi(pnumber); 
- 	playerCount = atoi(playerTotalCount); 
+ 	strcpy(shmptr->playerName, pname); 
+ 	shmptr->playerNumber = atoi(pnumber); 
+ 	shmptr->playerCount = atoi(playerTotalCount); 
  } 
