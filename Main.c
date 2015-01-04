@@ -65,8 +65,8 @@ int main(int argc, const char *argv[])
    	}
 
 	//-------------SHM--------------//
-	struct shm *game;
-	int shm_id = shmget(IPC_PRIVATE, sizeof(game), IPC_CREAT | 0666);
+
+	int shm_id = shmget(IPC_PRIVATE, sizeof(struct shm), IPC_CREAT | 0666);
 	struct shm *shmptr = (struct shm *) shmat(shm_id, NULL, 0);
 
 	if (shm_id < 0)
@@ -80,7 +80,6 @@ int main(int argc, const char *argv[])
 		fprintf(stderr, "Fehler bei shmat().\n");
 		return EXIT_FAILURE;
     }
-	shmptr=game;
 
 
 	//-------------FORK-------------//
@@ -93,10 +92,10 @@ int main(int argc, const char *argv[])
 	} else if (pid == 0) {
 	/* Connector */
 		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
-		game->pid = getpid();
+		shmptr->pid = getpid();
 	} else {
 	/* Thinker */
-		game->ppid = getpid();
+		shmptr->ppid = getpid();
 		if(waitpid(pid, NULL, 0) < 0) {
 			perror("Fehler beim Warten auf Kindprozess!");
 		 	return EXIT_FAILURE;
