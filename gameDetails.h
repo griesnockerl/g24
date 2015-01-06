@@ -10,6 +10,8 @@ struct shm{
 	int remainToHit;
 	int ppid;
 	int pid;
+	char p0[9][3];
+	char *p1[];
 };
 
 

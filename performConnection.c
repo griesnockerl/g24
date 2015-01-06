@@ -3,7 +3,8 @@
 #include <netinet/in.h> 
 #include <string.h> 
 #include <arpa/inet.h> 
-  
+#include <stdio.h>
+
 #include "gameDetails.h" 
   
 #define BUFFER	1024 
@@ -16,7 +17,8 @@
          exit(1); 
      } 
  } 
- 
+
+
  void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME, struct shm *shmptr) 
  {
      struct sockaddr_in server; 
@@ -149,6 +151,22 @@ for ( i = 0; i < BUFFER - 1; i++) {
 	}
 printf("S: %s", readBuffer);
 	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
+
+//------SHM------// 
+ 	char *strdel = strtok(playerNrAndName, "+ YOU"); 
+ 	char *pnumber = malloc(sizeof(char)); 
+ 	char *pname = malloc(sizeof(char)); 
+  
+ 	strcpy(pnumber, strdel); 
+ 	strdel = strtok(NULL, ""); 
+ 	strcpy(pname, strdel); 
+  
+ 	//init vars in gameDetails.h 
+	shmptr->playerName= malloc(BUFFER);
+ 	strcpy(shmptr->playerName, pname); 
+ 	shmptr->playerNumber = atoi(pnumber); 
+ 	shmptr->playerCount = atoi(playerTotalCount); 
+
 /*
 ---------------SPIELVERLAUF-------------- */
 	char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount, *playerNamepieceNrAndPos;
@@ -171,11 +189,16 @@ switch(readComm[2]) {
 		case 'M': /*  MOVE */
 				
 		
-				maxTimeforMove = malloc(BUFFER);
-				strcpy(maxTimeforMove, readComm);
-				printf("S: %s", maxTimeforMove);
-				error(maxTimeforMove[0], "Fehler im Spielverlauf: Maximale Zugzeit kann nicht festgelegt werden!");
+				
+				
+				printf("S: %s", readComm);
+				error(readComm[0], "Fehler im Spielverlauf: Maximale Zugzeit kann nicht festgelegt werden!");
+				maxTimeforMove=strtok(readComm," ");
+				maxTimeforMove=strtok(NULL," ");
+				maxTimeforMove=strtok(NULL,"");
 				shmptr->maxTimeMove = atoi(maxTimeforMove);
+
+				printf("%d\n",shmptr->maxTimeMove);
 
 				piecesToHit = malloc(BUFFER);
 				for ( i = 0; i < BUFFER; i++) {
@@ -185,9 +208,15 @@ switch(readComm[2]) {
 
 				printf("S: %s", piecesToHit);
 				error(piecesToHit[0], "Fehler im Spielverlauf: Anzahl zu schlagender Steine kann nicht festgelegt werden!");
+				piecesToHit=strtok(piecesToHit," ");
+				piecesToHit=strtok(NULL," ");
+				piecesToHit=strtok(NULL,"");
 				shmptr->remainToHit = atoi(piecesToHit);
-				
+
+				printf("%d\n",shmptr->remainToHit);
+
 				playersCountpiecesCount = malloc(BUFFER);
+
 				for ( i = 0; i < BUFFER; i++) {
 				  recv(sock, &playersCountpiecesCount[i], 1, 0);
         			  if (playersCountpiecesCount[i] == '\n') break;
@@ -210,9 +239,16 @@ switch(readComm[2]) {
 				
 				shmptr->piecesCount = atoi(piecCount);
 				
-
+				printf("%d, %d\n",shmptr->playerCount,shmptr->piecesCount);
 				int o, p;
+				char *temp1,*temp2,*position;
+				temp1= malloc(BUFFER);
+				temp2= malloc(BUFFER);
 
+				position= malloc(BUFFER);
+				int spielernummer,steinnummer;
+				//shmptr->p0= malloc(shmptr->piecesCount);
+				//shmptr->p1= malloc(shmptr->piecesCount);
 				for(o = 0; o < shmptr->playerCount; o++) {
 				for(p = 0; p < shmptr->piecesCount; p++) {
 					free(readBuffer);
@@ -221,11 +257,29 @@ switch(readComm[2]) {
 	  					recv(sock, &readBuffer[i], 1, 0);
           					if (readBuffer[i] == '\n') break;
 					}
-
 					printf("S: %s", readBuffer);
 					error(readBuffer[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
 
+					temp1 = strtok(readBuffer, ".");
+					temp2 = strtok(NULL, " ");
+					position = strtok(NULL, "\n");
+					steinnummer = atoi(temp2);
+					
+					temp1 = strtok(temp1, "E");
+					temp1 = strtok(NULL, "E");
+					temp1 = strtok(NULL, "");
+					spielernummer= atoi(temp1);
+					printf("%d,%d,%s\n",spielernummer,steinnummer,position);	
+					
+
+					if (spielernummer == 0){
+						strcpy(shmptr->p0[steinnummer], position);//shmptr->p0[steinnummer]=position;
+					}
+					else{
+						shmptr->p1[steinnummer]=position;
+					}
 				}}
+
 
 				free(readBuffer);
 				readBuffer = malloc(BUFFER);
@@ -307,7 +361,7 @@ switch(readComm[2]) {
 
 				printf("S: %s", playerCountpiecesCount);
 				error(playerCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
-	
+				
 				
 				for(o = 0; o < shmptr->playerCount; o++) {
 				for(p = 0; p < shmptr->piecesCount; p++) {
@@ -352,17 +406,5 @@ switch(readComm[2]) {
 } 
 
   
- 	//------SHM------// 
- 	char *strdel = strtok(playerNrAndName, "+ YOU"); 
- 	char *pnumber = malloc(sizeof(char)); 
- 	char *pname = malloc(sizeof(char)); 
-  
- 	strcpy(pnumber, strdel); 
- 	strdel = strtok(NULL, ""); 
- 	strcpy(pname, strdel); 
-  
- 	//init vars in gameDetails.h 
- 	strcpy(shmptr->playerName, pname); 
- 	shmptr->playerNumber = atoi(pnumber); 
- 	shmptr->playerCount = atoi(playerTotalCount); 
+ 	
  } 
