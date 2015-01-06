@@ -11,14 +11,7 @@
 #include "config.c"
 #include "Connector.c"
 #include "think.c"
-void my_handler()
-{
-  
-        printf("hallo\n\n");
-   
-}
-
-
+void my_handler();
 
 int main(int argc, const char *argv[])
 {
