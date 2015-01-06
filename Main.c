@@ -5,20 +5,20 @@
 #include <sys/wait.h>
 #include <sys/shm.h>
 #include <sys/ipc.h>
-
+#include <signal.h>
 #include "gameDetails.h"
 
 #include "config.c"
 #include "Connector.c"
+#include "think.c"
+void my_handler()
+{
+  
+        printf("hallo\n\n");
+   
+}
 
-/*struct gameDetails{
-   char *playerName;
-   int playerTotalCount;
-   int playerNumber;
-   int ppid;
-   int pid;
-}*game;
-*/
+
 
 int main(int argc, const char *argv[])
 {
@@ -65,10 +65,10 @@ int main(int argc, const char *argv[])
    	}
 
 	//-------------SHM--------------//
-
+	
 	int shm_id = shmget(IPC_PRIVATE, sizeof(struct shm), IPC_CREAT | 0666);
 	struct shm *shmptr = (struct shm *) shmat(shm_id, NULL, 0);
-
+	shmptr->flag=0; //SHM FLAG
 	if (shm_id < 0)
 	{
 		fprintf(stderr, "Fehler bei shmget().\n");
@@ -80,6 +80,7 @@ int main(int argc, const char *argv[])
 		fprintf(stderr, "Fehler bei shmat().\n");
 		return EXIT_FAILURE;
     }
+	
 
 
 	//-------------FORK-------------//
@@ -96,6 +97,14 @@ int main(int argc, const char *argv[])
 	} else {
 	/* Thinker */
 		shmptr->ppid = getpid();
+		while(1){
+			if(shmptr->flag==1){
+				signal(SIGUSR1, my_handler);
+				break;
+			}}
+		shmptr->flag=0;
+		think(shmptr);
+  
 		if(waitpid(pid, NULL, 0) < 0) {
 			perror("Fehler beim Warten auf Kindprozess!");
 		 	return EXIT_FAILURE;
@@ -111,6 +120,10 @@ int main(int argc, const char *argv[])
 
 			return EXIT_SUCCESS;
 		}
+		
+			
+			
+			
 	}
 	//-------------FORK-END---------//
 

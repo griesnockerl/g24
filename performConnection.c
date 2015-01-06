@@ -4,7 +4,7 @@
 #include <string.h> 
 #include <arpa/inet.h> 
 #include <stdio.h>
-
+#include <signal.h>
 #include "gameDetails.h" 
   
 #define BUFFER	1024 
@@ -247,8 +247,7 @@ switch(readComm[2]) {
 
 				position= malloc(BUFFER);
 				int spielernummer,steinnummer;
-				//shmptr->p0= malloc(shmptr->piecesCount);
-				//shmptr->p1= malloc(shmptr->piecesCount);
+
 				for(o = 0; o < shmptr->playerCount; o++) {
 				for(p = 0; p < shmptr->piecesCount; p++) {
 					free(readBuffer);
@@ -273,10 +272,10 @@ switch(readComm[2]) {
 					
 
 					if (spielernummer == 0){
-						strcpy(shmptr->p0[steinnummer], position);//shmptr->p0[steinnummer]=position;
+						strcpy(shmptr->p0[steinnummer], position);
 					}
 					else{
-						shmptr->p1[steinnummer]=position;
+						strcpy(shmptr->p1[steinnummer], position);
 					}
 				}}
 
@@ -302,8 +301,8 @@ switch(readComm[2]) {
 				}
 				printf("S: %s", readBuffer);
 				error(readBuffer[0], "Fehler im Spielverlauf: Spielverlaufphase kann nicht abgeschlossen werden!");
-				
-				
+				shmptr->flag=1;//SET FLAG
+				kill(shmptr->ppid,SIGUSR1);
 				
 				/* SPIELZUG
 				thinker soll dann berechnen .. etc s. M3-2. dann muss noch fehlermeldung falls spielzug ungueltig ist rein. 

@@ -2,6 +2,7 @@
 #define gameDetails
 
 struct shm{
+	int flag;
 	char *playerName;
 	int playerCount;
 	int playerNumber;
@@ -11,7 +12,8 @@ struct shm{
 	int ppid;
 	int pid;
 	char p0[9][3];
-	char *p1[];
+	char p1[9][3];
+	
 };
 
 
