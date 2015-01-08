@@ -305,17 +305,66 @@ switch(readComm[2]) {
 				kill(shmptr->ppid,SIGUSR1);
 				
 				/* SPIELZUG
-				thinker soll dann berechnen .. etc s. M3-2. dann muss noch fehlermeldung falls spielzug ungueltig ist rein. 
-				send(sock, ? , ? , 0);
-				printf("C: %s", );
+				 dann muss noch fehlermeldung falls spielzug ungueltig ist rein. */
+				FD_SET mySet;
+				FD_ZERO(&mySet);
+				FD_SET(sock, &mySet);
+				FD_SET(fd[0]; &mySet);		
+				int sback;
+				int sock_max;
+	
+				if (fd[0] > sock) {
+					sock_max = fd[0] + 1;
+				} else {
+					sock_max = sock + 1;
+				}
+
+				if ((sback = (select(sock_max , &mySet, NULL, NULL, NULL ))) < 0) {
+
+					perror("Fehler bei select().");
+					exit(1);
+
+				} else if (sback == 0) {
+					perror("Timeout bei select().");
+					exit(1);
+				}		
+				
+				while (1) {
+					if(FD_ISSET(sock, &mySet)) {
+						free(readBuffer);
+						readBuffer = malloc(BUFFER);
+						for ( i = 0; i < BUFFER; i++) {
+				 		recv(sock, &readBuffer[i], 1, 0);
+        			 		 if (readBuffer[i] == '\n') break;
+						
+						}
+						printf("S: %s", readBuffer);
+						error(readBuffer[0], "Fehler beim Warten auf Berechnung des Spielzugs."); 
+
+
+					} else if (FD_ISSET(fd[0], &mySet)) {
+
+							free(readBuffer);
+							readBuffer = malloc(BUFFER);	
+							n = read(fd[0], readBuffer, sizeof(readBuffer));
+							send(sock, readBuffer, strlen(readBuffer), 0);
+		
+							printf("C: PLAY %s", readBuffer);
+							break;
+					}
+				}
+			
+				
+
 				free(readBuffer);
-				readBuffer = malloc(BUFFER);	
+				readBuffer = malloc(BUFFER);
 				for ( i = 0; i < BUFFER; i++) {
 				  recv(sock, &readBuffer[i], 1, 0);
         			  if (readBuffer[i] == '\n') break;
 				}
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler beim Spielzug!"); */
+				error(readBuffer[0], "Fehler beim Spielzug!"); 
+
 				
 				
 				
