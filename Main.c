@@ -11,7 +11,23 @@
 #include "config.c"
 #include "Connector.c"
 #include "think.c"
-void my_handler();
+void my_handler() {
+	
+	char *firstMove = "A1";
+	int n = sizeof(firstmove);
+	/*char *zug = malloc(sizeof(...));
+	strcpy(zug, firstmove); */
+	
+
+	if ((write (fd[1], firstmove , sizeof(firstmove))) != n) {
+	
+			perror("Fehler bei write().");
+			exit(EXIT_FAILURE);
+
+	}
+
+	
+};
 
 int main(int argc, const char *argv[])
 {
@@ -79,16 +95,19 @@ int main(int argc, const char *argv[])
 	//-------------FORK-------------//
 	
 	pid_t pid;
-
+	int fd[2];
+	
 	if ((pid = fork()) < 0) {
 		fprintf(stderr, "Fehler bei fork().\n");
 		return EXIT_FAILURE; 
 	} else if (pid == 0) {
 	/* Connector */
+		close(fd[1]); //Schreibseite schließen		
 		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
 		shmptr->pid = getpid();
 	} else {
 	/* Thinker */
+		close(fd[0]); //Leseseite schließen
 		shmptr->ppid = getpid();
 		while(1){
 			if(shmptr->flag==1){
