@@ -89,9 +89,10 @@ int main(int argc, const char *argv[])
 		return EXIT_FAILURE; 
 	} else if (pid == 0) {
 	/* Connector */
-		close(shmptr->fd[1]); //Schreibseite schließen		
+		close(shmptr->fd[1]); //Schreibseite schließen	
+		shmptr->pid = getpid();	
 		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
-		shmptr->pid = getpid();
+
 		
 	} else {
 	/* Thinker */
@@ -115,10 +116,30 @@ int main(int argc, const char *argv[])
 					exit(EXIT_FAILURE);
 		  
 				}
+			}
+
+			int status;
+			pid_t return_pid = waitpid(pid, &status, WNOHANG); /* WNOHANG def'd in wait.h */
+			if (return_pid == -1) {
+    				perror("Fehler beim Warten auf Kindprozess!");
+				return EXIT_FAILURE;
+			} else if (return_pid == 0) {
+   				 continue;
+			} else if (return_pid == pid) {
+
+   		 		if(shmctl(shm_id, IPC_RMID, 0) == -1)
+				{
+					fprintf(stderr, "Fehler bei shmctl().\n");
+					return EXIT_FAILURE;
+				}
+				shmdt((void *) shmptr);
+				shmctl(shm_id,IPC_RMID,NULL);
+
+				return EXIT_SUCCESS;
+			}
 		}
 
-
-			}/*
+			/*
 			if(waitpid(pid, NULL, 0) < 0) {
 				perror("Fehler beim Warten auf Kindprozess!");
 				return EXIT_FAILURE;
