@@ -12,8 +12,8 @@ struct shm{
 	int remainToHit;
 	int ppid;
 	int pid;
-	char p0[9][3];
-	char p1[9][3];
+	char p0[9][2];
+	char p1[9][2];
 	
 };
 

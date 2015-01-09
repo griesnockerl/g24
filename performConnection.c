@@ -354,7 +354,7 @@ switch(readComm[2]) {
 							
 							send(sock, readBuffer, strlen(readBuffer), 0);
 		
-							printf("C: PLAY %s", readBuffer);
+							printf("C: %s", readBuffer);
 							break;
 					}
 				}
@@ -383,16 +383,12 @@ switch(readComm[2]) {
 		
 		case 'W': /* WAIT */
 
-				// free(readBuffer);
-				printf("> %s\n", readBuffer);
-				printf("> %s\n", readComm);
-				strcpy(readBuffer, readComm);
-				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im Spielverlauf: Fehler bei wait!");
+				printf("S: %s", readComm);
+				error(readComm[0], "Fehler im Spielverlauf: Fehler bei wait!");
 	
-				char *waitack = "OKWAIT\n";
+				
 				send(sock, "OKWAIT\n", 7, 0);
-				printf("C: %s", waitack);
+				printf("C: OKWAIT\n");
 
 				free(readComm);
 				break;

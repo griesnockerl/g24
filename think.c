@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "gameDetails.h"
-void think(struct shm *shmptr){
+char* think(struct shm *shmptr){
 	char feld[3][8];
 	int o, p;
 
@@ -18,18 +18,21 @@ void think(struct shm *shmptr){
 	for(o = 0; o < shmptr->playerCount; o++) {
 		for(p = 0; p < shmptr->piecesCount; p++) {
 			if ((o == 0)&&(strlen(shmptr->p0[p])>1)){
+
 				switch (shmptr->p0[p][0]){
-					case 'A': feld[0][shmptr->p0[p][1]]='*';break;
-					case 'B': feld[1][shmptr->p0[p][1]]='*';break;
-					case 'C': feld[2][shmptr->p0[p][1]]='*';break;
+					
+					case 'A': feld[0][shmptr->p0[p][1]- '0']='*';break;
+					case 'B': feld[1][shmptr->p0[p][1]- '0']='*';break;
+					case 'C': feld[2][shmptr->p0[p][1]- '0']='*';break;
 					default:break;
 					}
 			}
 			else{
 				switch (shmptr->p1[p][0]){
-					case 'A': feld[0][shmptr->p1[p][1]]='#';break;
-					case 'B': feld[1][shmptr->p1[p][1]]='#';break;
-					case 'C': feld[2][shmptr->p1[p][1]]='#';break;
+					
+					case 'A': feld[0][shmptr->p1[p][1]- '0']='#';break;
+					case 'B': feld[1][shmptr->p1[p][1]- '0']='#';break;
+					case 'C': feld[2][shmptr->p1[p][1]- '0']='#';break;
 					default:break;
 					}		
 			}
@@ -49,5 +52,5 @@ void think(struct shm *shmptr){
 	printf("\t\t|          |          |\n");
 	printf("\t\t%c----------%c----------%c\n",feld[0][6],feld[0][5],feld[0][4]);
 
-
+	return "PLAY A1\n";
 }

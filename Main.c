@@ -98,58 +98,45 @@ int main(int argc, const char *argv[])
 		close(shmptr->fd[0]); //Leseseite schließen
 		shmptr->ppid = getpid();
 		while(1){
-			close(shmptr->fd[0]); //Leseseite schließen
+
 			if(shmptr->flag==1){
 				signal(SIGUSR1, my_handler);
 				shmptr->flag=0;
 		
-	
-			char *firstmove = "PLAY A1\n";
-			int n = sizeof(firstmove);
-	
+				char *firstmove= malloc(1024);
+				firstmove = think(shmptr);
+				int n = sizeof(firstmove);
 	
 
-			if ((write (shmptr->fd[1], firstmove , sizeof(firstmove))) != n) {
+
+				if ((write (shmptr->fd[1], firstmove , sizeof(firstmove))) != n) {
 	
-				perror("Fehler bei write().");
-				exit(EXIT_FAILURE);
+					perror("Fehler beim write().");
+					exit(EXIT_FAILURE);
 		  
-			}
+				}
+		}
 
-	
-			think(shmptr);
+
+			}/*
 			if(waitpid(pid, NULL, 0) < 0) {
 				perror("Fehler beim Warten auf Kindprozess!");
 				return EXIT_FAILURE;
-			} else if(waitpid(pid, NULL, 0) == 0) {
-			//further Code
+			} else if((waitpid(pid, NULL, 0) == 0)&&(shmptr->flag==0)) {
+			
 				if(shmctl(shm_id, IPC_RMID, 0) == -1)
-			{
+				{
 					fprintf(stderr, "Fehler bei shmctl().\n");
 					return EXIT_FAILURE;
-			}
-			shmdt((void *) shmptr);
-			shmctl(shm_id,IPC_RMID,NULL);
+				}
+				shmdt((void *) shmptr);
+				shmctl(shm_id,IPC_RMID,NULL);
 
-			return EXIT_SUCCESS;
-			}
-			continue;
-			}
-		  
-	}
+				return EXIT_SUCCESS;
+			}*/
+
 		
-		
-		
-		
-		
-  
-		
-		
-			
-			
-			
 	}
 	//-------------FORK-END---------//
-
 	return EXIT_SUCCESS;
 }
