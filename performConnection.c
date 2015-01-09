@@ -6,9 +6,9 @@
 #include <stdio.h>
 #include <signal.h>
 #include "gameDetails.h" 
-  
+#include <sys/select.h>  
 #define BUFFER	1024 
-  
+ 
  void error(char errorCode, char *msg) 
  { 
      if(errorCode == '-') 
@@ -179,7 +179,11 @@ while(testLoop) {
 		readComm = malloc(BUFFER);
 		for ( i = 0; i < BUFFER; i++) {
 	  		recv(sock, &readComm[i], 1, 0);
-          if (readComm[i] == '\n') break;
+			
+		if (readComm[i] == '\n')
+		{
+		  break;
+		}
 	}
 
 		
@@ -306,15 +310,15 @@ switch(readComm[2]) {
 				
 				/* SPIELZUG
 				 dann muss noch fehlermeldung falls spielzug ungueltig ist rein. */
-				FD_SET mySet;
+				fd_set mySet;
 				FD_ZERO(&mySet);
 				FD_SET(sock, &mySet);
-				FD_SET(fd[0]; &mySet);		
+				FD_SET(shmptr->fd[0], &mySet);		
 				int sback;
 				int sock_max;
 	
-				if (fd[0] > sock) {
-					sock_max = fd[0] + 1;
+				if (shmptr->fd[0] > sock) {
+					sock_max = shmptr->fd[0] + 1;
 				} else {
 					sock_max = sock + 1;
 				}
@@ -342,11 +346,12 @@ switch(readComm[2]) {
 						error(readBuffer[0], "Fehler beim Warten auf Berechnung des Spielzugs."); 
 
 
-					} else if (FD_ISSET(fd[0], &mySet)) {
+					} else if (FD_ISSET(shmptr->fd[0], &mySet)) {
 
 							free(readBuffer);
 							readBuffer = malloc(BUFFER);	
-							n = read(fd[0], readBuffer, sizeof(readBuffer));
+							int n = read(shmptr->fd[0], readBuffer, sizeof(readBuffer));
+							
 							send(sock, readBuffer, strlen(readBuffer), 0);
 		
 							printf("C: PLAY %s", readBuffer);
@@ -362,8 +367,12 @@ switch(readComm[2]) {
 				  recv(sock, &readBuffer[i], 1, 0);
         			  if (readBuffer[i] == '\n') break;
 				}
+				// MOVEOK
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler beim Spielzug!"); 
+				error(readBuffer[0], "Fehler beim Spielzug!");
+				
+				free(readBuffer);
+				readBuffer = malloc(BUFFER);
 
 				
 				
@@ -374,12 +383,15 @@ switch(readComm[2]) {
 		
 		case 'W': /* WAIT */
 
+				// free(readBuffer);
+				printf("> %s\n", readBuffer);
+				printf("> %s\n", readComm);
 				strcpy(readBuffer, readComm);
 				printf("S: %s", readBuffer);
 				error(readBuffer[0], "Fehler im Spielverlauf: Fehler bei wait!");
 	
 				char *waitack = "OKWAIT\n";
-				send(sock, waitack, strlen(waitack), 0);
+				send(sock, "OKWAIT\n", 7, 0);
 				printf("C: %s", waitack);
 
 				free(readComm);
@@ -447,6 +459,7 @@ switch(readComm[2]) {
 		
 
 		default:  /*- Fehlermeldung */
+		                printf("ERROR: %s\n", readComm);
 				error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
 				break;
 	} 

@@ -11,23 +11,10 @@
 #include "config.c"
 #include "Connector.c"
 #include "think.c"
-void my_handler() {
-	
-	char *firstMove = "A1";
-	int n = sizeof(firstmove);
-	/*char *zug = malloc(sizeof(...));
-	strcpy(zug, firstmove); */
-	
 
-	if ((write (fd[1], firstmove , sizeof(firstmove))) != n) {
-	
-			perror("Fehler bei write().");
-			exit(EXIT_FAILURE);
+void my_handler(){}
 
-	}
 
-	
-};
 
 int main(int argc, const char *argv[])
 {
@@ -95,43 +82,68 @@ int main(int argc, const char *argv[])
 	//-------------FORK-------------//
 	
 	pid_t pid;
-	int fd[2];
+	int pip = pipe(shmptr->fd);
 	
 	if ((pid = fork()) < 0) {
 		fprintf(stderr, "Fehler bei fork().\n");
 		return EXIT_FAILURE; 
 	} else if (pid == 0) {
 	/* Connector */
-		close(fd[1]); //Schreibseite schließen		
+		close(shmptr->fd[1]); //Schreibseite schließen		
 		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
 		shmptr->pid = getpid();
+		
 	} else {
 	/* Thinker */
-		close(fd[0]); //Leseseite schließen
+		close(shmptr->fd[0]); //Leseseite schließen
 		shmptr->ppid = getpid();
 		while(1){
+			close(shmptr->fd[0]); //Leseseite schließen
 			if(shmptr->flag==1){
 				signal(SIGUSR1, my_handler);
-				break;
-			}}
-		shmptr->flag=0;
-		think(shmptr);
-  
-		if(waitpid(pid, NULL, 0) < 0) {
-			perror("Fehler beim Warten auf Kindprozess!");
-		 	return EXIT_FAILURE;
-		} else if(waitpid(pid, NULL, 0) == 0) {
-			//further Code
-			if(shmctl(shm_id, IPC_RMID, 0) == -1)
-			{
-				fprintf(stderr, "Fehler bei shmctl().\n");
+				shmptr->flag=0;
+		
+	
+			char *firstmove = "PLAY A1\n";
+			int n = sizeof(firstmove);
+	
+	
+
+			if ((write (shmptr->fd[1], firstmove , sizeof(firstmove))) != n) {
+	
+				perror("Fehler bei write().");
+				exit(EXIT_FAILURE);
+		  
+			}
+
+	
+			think(shmptr);
+			if(waitpid(pid, NULL, 0) < 0) {
+				perror("Fehler beim Warten auf Kindprozess!");
 				return EXIT_FAILURE;
+			} else if(waitpid(pid, NULL, 0) == 0) {
+			//further Code
+				if(shmctl(shm_id, IPC_RMID, 0) == -1)
+			{
+					fprintf(stderr, "Fehler bei shmctl().\n");
+					return EXIT_FAILURE;
 			}
 			shmdt((void *) shmptr);
 			shmctl(shm_id,IPC_RMID,NULL);
 
 			return EXIT_SUCCESS;
-		}
+			}
+			continue;
+			}
+		  
+	}
+		
+		
+		
+		
+		
+  
+		
 		
 			
 			
