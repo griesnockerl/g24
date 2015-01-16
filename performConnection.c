@@ -172,7 +172,7 @@ printf("S: %s", readBuffer);
 	char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount, *playerNamepieceNrAndPos;
 	char *playerCountpiecesCount, *winnerNrandName;
 	int testLoop = 1;
-	char *readComm;
+	char *readComm, *tmp;
 	
 while(testLoop) {	
 
@@ -351,10 +351,15 @@ switch(readComm[2]) {
 							free(readBuffer);
 							readBuffer = malloc(BUFFER);	
 							int n = read(shmptr->fd[0], readBuffer, sizeof(readBuffer));
-							
-							send(sock, readBuffer, strlen(readBuffer), 0);
-		
-							printf("C: %s", readBuffer);
+							printf("Read from pipe %i bytes.", n);
+
+							tmp = calloc(n+1, sizeof(char));
+							memcpy(tmp, readBuffer, n);
+                             				tmp[n] = '\0';
+							send(sock, tmp, strlen(tmp), 0);
+									
+							printf("C: %s", tmp);
+							free(tmp);
 							break;
 					}
 				}

@@ -11,8 +11,30 @@
 #include "config.c"
 #include "Connector.c"
 #include "think.c"
+struct shm *shmptr;
+void my_handler(int sig){
+	if((shmptr->flag==1)&&(SIGUSR1==sig)){
+				
+				shmptr->flag=0;
+		
+				char *firstmove= malloc(80);
+				firstmove = think(shmptr);
+printf("Firstmove should be: %s\n", firstmove);
+				int n= strlen(firstmove);
+				
+	
 
-void my_handler(){}
+
+				if ((write (shmptr->fd[1], firstmove , n)) != n) {
+	
+					perror("Fehler beim write().");
+					exit(EXIT_FAILURE);
+		  
+				}
+				//free(firstmove);printf("hallo");
+	}
+}
+
 
 
 
@@ -63,7 +85,7 @@ int main(int argc, const char *argv[])
 	//-------------SHM--------------//
 	
 	int shm_id = shmget(IPC_PRIVATE, sizeof(struct shm), IPC_CREAT | 0666);
-	struct shm *shmptr = (struct shm *) shmat(shm_id, NULL, 0);
+	shmptr = (struct shm *) shmat(shm_id, NULL, 0);
 	shmptr->flag=0; //SHM FLAG
 	if (shm_id < 0)
 	{
@@ -98,25 +120,11 @@ int main(int argc, const char *argv[])
 	/* Thinker */
 		close(shmptr->fd[0]); //Leseseite schließen
 		shmptr->ppid = getpid();
+
 		while(1){
 
-			if(shmptr->flag==1){
-				signal(SIGUSR1, my_handler);
-				shmptr->flag=0;
-		
-				char *firstmove= malloc(1024);
-				firstmove = think(shmptr);
-				int n = sizeof(firstmove);
-	
-
-
-				if ((write (shmptr->fd[1], firstmove , sizeof(firstmove))) != n) {
-	
-					perror("Fehler beim write().");
-					exit(EXIT_FAILURE);
-		  
-				}
-			}
+			signal(SIGUSR1, my_handler);
+			
 
 			int status;
 			pid_t return_pid = waitpid(pid, &status, WNOHANG); /* WNOHANG def'd in wait.h */
@@ -136,7 +144,7 @@ int main(int argc, const char *argv[])
 				shmctl(shm_id,IPC_RMID,NULL);
 
 				return EXIT_SUCCESS;
-			}
+			}else {continue;}
 		}
 
 			/*
