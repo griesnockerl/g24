@@ -43,9 +43,9 @@ char* think(struct shm *shmptr){
 	printf("\t\t|   %c------%c------%c   |\n",feld[1][0],feld[1][1],feld[1][2]);
 	printf("\t\t|   |      |      |   |\n");
 	printf("\t\t|   |   %c--%c--%c   |   |\n",feld[2][0],feld[2][1],feld[2][2]);
-	printf("\t\t|   |   |  |  |   |   |\n");
+	printf("\t\t|   |   |     |   |   |\n");
 	printf("\t\t%c---%c---%c     %c---%c---%c\n",feld[0][7],feld[1][7],feld[2][7],feld[2][3],feld[1][3],feld[0][3]);
-	printf("\t\t|   |   |  |  |   |   |\n");
+	printf("\t\t|   |   |     |   |   |\n");
 	printf("\t\t|   |   %c--%c--%c   |   |\n",feld[2][6],feld[2][5],feld[2][4]);
 	printf("\t\t|   |      |      |   |\n");
 	printf("\t\t|   %c------%c------%c   |\n",feld[1][6],feld[1][5],feld[1][4]);

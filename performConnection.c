@@ -9,11 +9,13 @@
 #include <sys/select.h>  
 #define BUFFER	1024 
  
- void error(char errorCode, char *msg) 
+ void error(char errorCode, char *msg,struct shm *shmptr) 
  { 
      if(errorCode == '-') 
      { 
-         perror(msg); 
+        perror(msg); 
+	shmdt((void *) shmptr);
+	shmctl(shmptr->shm_id,IPC_RMID,NULL);
          exit(1); 
      } 
  } 
@@ -26,14 +28,18 @@
   
      if (sock < 0) 
      { 
-         perror("Client: Socket fehler!\n"); 
-         exit(1); 
+        perror("Client: Socket fehler!\n"); 
+	shmdt((void *) shmptr);
+	shmctl(shmptr->shm_id,IPC_RMID,NULL);
+        exit(1); 
      } 
   
      if(host == NULL) 
      { 
-         perror("Server nicht gefunden!\n"); 
-         exit(1); 
+        perror("Server nicht gefunden!\n"); 
+	shmdt((void *) shmptr);
+	shmctl(shmptr->shm_id,IPC_RMID,NULL);
+        exit(1); 
      } 
      
      memset(&server, 0, sizeof(server)); 
@@ -44,7 +50,9 @@
      if(connect(sock, (struct sockaddr *)&server, sizeof(struct sockaddr)) < 0) 
      { 
         perror("Verbindungsaufbau zum Game-Server fehlgeschlagen!"); 
-         exit(1); 
+	shmdt((void *) shmptr);
+	shmctl(shmptr->shm_id,IPC_RMID,NULL);
+        exit(1); 
     } 
      /*---------------PROLOG-------------- */ 
      char *readBuffer, *gameServerVersion, *gameKindName, *gameName, *playerNrAndName, *playerTotalCount; 
@@ -59,7 +67,7 @@
 	}
     printf("S: %s", gameServerVersion); 
       
-    error(gameServerVersion[0], "Fehler im Prolog: Verbindungsaufbau fehlgeschlagen!"); 
+    error(gameServerVersion[0], "Fehler im Prolog: Verbindungsaufbau fehlgeschlagen!",shmptr); 
   
      //Send client version 
      char *sendmsg = "VERSION 1.0\n"; 
@@ -74,7 +82,7 @@
 	}
      printf("S: %s", readBuffer); 
   
-     error(readBuffer[0], "Fehler im Prolog: Client version wird nicht akzeptiert!"); 
+     error(readBuffer[0], "Fehler im Prolog: Client version wird nicht akzeptiert!",shmptr); 
   	
      //Send game id 
      char id[] = "ID "; 
@@ -93,10 +101,12 @@
      
      if((strstr(gameKindName, "NMMorris")) == NULL) {
 		printf("Fehler: Client kann nur Mühle spielen! Erwarte NMMorris als Spiel!");
+		shmdt((void *) shmptr);
+		shmctl(shmptr->shm_id,IPC_RMID,NULL);
 		exit(1);
 	}
 	
-	 error(gameKindName[0], "Fehler im Prolog: Art des Spiels kann nicht festgelegt werden!"); 	
+	 error(gameKindName[0], "Fehler im Prolog: Art des Spiels kann nicht festgelegt werden!",shmptr); 	
 	
      gameName = malloc(BUFFER);
  for ( i = 0; i < BUFFER; i++) {
@@ -105,7 +115,7 @@
 	}
     printf("S: %s", gameName); 
   
-     error(gameName[0], "Fehler im Prolog: Spielname kann nicht festgelegt werden!"); 
+     error(gameName[0], "Fehler im Prolog: Spielname kann nicht festgelegt werden!",shmptr); 
   
      //Send playernumber,at first it must be empty 
      char *sendPlayerNr = "PLAYER\n"; 
@@ -120,7 +130,7 @@
 	}	  
      printf("S: %s", playerNrAndName); 
   
-     error(playerNrAndName[0], "Fehler im Prolog: Spielernummer und Spielername kann nicht festgelegt werden!"); 
+     error(playerNrAndName[0], "Fehler im Prolog: Spielernummer und Spielername kann nicht festgelegt werden!",shmptr); 
   
      playerTotalCount = malloc(BUFFER); 
      
@@ -130,7 +140,7 @@ for ( i = 0; i < BUFFER; i++) {
 	}
      printf("S: %s", playerTotalCount); 
   
-     error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!"); 
+     error(playerTotalCount[0], "Fehler im Prolog: Anzahl der Spieler kann nicht festgelegt werden!",shmptr); 
 
 free(readBuffer);
 readBuffer = malloc(BUFFER);
@@ -140,7 +150,7 @@ for ( i = 0; i < BUFFER - 1; i++) {
           	break;
 	}
 printf("S: %s", readBuffer);
-	error(readBuffer[0], "Fehler im Prolog: Spielernr, Name und Zustand, kann nicht ausgegeben werden! ");
+	error(readBuffer[0], "Fehler im Prolog: Spielernr, Name und Zustand, kann nicht ausgegeben werden! ",shmptr);
 	
 	free(readBuffer);
 readBuffer = malloc(BUFFER);
@@ -150,7 +160,7 @@ for ( i = 0; i < BUFFER - 1; i++) {
           	break;
 	}
 printf("S: %s", readBuffer);
-	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!");
+	error(readBuffer[0], "Fehler im Prolog: Prologphase kann nicht korrekt abgeschlossen werden!",shmptr);
 
 //------SHM------// 
  	char *strdel = strtok(playerNrAndName, "+ YOU"); 
@@ -172,7 +182,7 @@ printf("S: %s", readBuffer);
 	char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount, *playerNamepieceNrAndPos;
 	char *playerCountpiecesCount, *winnerNrandName;
 	int testLoop = 1;
-	char *readComm;
+	char *readComm, *tmp;
 	
 while(testLoop) {	
 
@@ -196,7 +206,7 @@ switch(readComm[2]) {
 				
 				
 				printf("S: %s", readComm);
-				error(readComm[0], "Fehler im Spielverlauf: Maximale Zugzeit kann nicht festgelegt werden!");
+				error(readComm[0], "Fehler im Spielverlauf: Maximale Zugzeit kann nicht festgelegt werden!",shmptr);
 				maxTimeforMove=strtok(readComm," ");
 				maxTimeforMove=strtok(NULL," ");
 				maxTimeforMove=strtok(NULL,"");
@@ -211,7 +221,7 @@ switch(readComm[2]) {
 				}
 
 				printf("S: %s", piecesToHit);
-				error(piecesToHit[0], "Fehler im Spielverlauf: Anzahl zu schlagender Steine kann nicht festgelegt werden!");
+				error(piecesToHit[0], "Fehler im Spielverlauf: Anzahl zu schlagender Steine kann nicht festgelegt werden!",shmptr);
 				piecesToHit=strtok(piecesToHit," ");
 				piecesToHit=strtok(NULL," ");
 				piecesToHit=strtok(NULL,"");
@@ -227,7 +237,7 @@ switch(readComm[2]) {
 				}
 
 				printf("S: %s", playersCountpiecesCount);
-				error(playersCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Anzahl der Steine kann nicht festgelegt werden!");
+				error(playersCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Anzahl der Steine kann nicht festgelegt werden!",shmptr);
 				
 				char *playCount = malloc(sizeof(char));
 				char *piecCount = malloc(sizeof(char));
@@ -261,7 +271,7 @@ switch(readComm[2]) {
           					if (readBuffer[i] == '\n') break;
 					}
 					printf("S: %s", readBuffer);
-					error(readBuffer[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
+					error(readBuffer[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!",shmptr);
 
 					temp1 = strtok(readBuffer, ".");
 					temp2 = strtok(NULL, " ");
@@ -291,7 +301,7 @@ switch(readComm[2]) {
         			  if (readBuffer[i] == '\n') break;
 				}
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im Spielverlauf: Ausgabe der Liste der Spielernummer, Steinnummer und Position kann nicht korrekt abgeschlossen werden!");
+				error(readBuffer[0], "Fehler im Spielverlauf: Ausgabe der Liste der Spielernummer, Steinnummer und Position kann nicht korrekt abgeschlossen werden!",shmptr);
 
 				char *think = "THINKING\n";
 				send(sock, think, strlen(think), 0);
@@ -304,7 +314,7 @@ switch(readComm[2]) {
         			  if (readBuffer[i] == '\n') break;
 				}
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im Spielverlauf: Spielverlaufphase kann nicht abgeschlossen werden!");
+				error(readBuffer[0], "Fehler im Spielverlauf: Spielverlaufphase kann nicht abgeschlossen werden!",shmptr);
 				shmptr->flag=1;//SET FLAG
 				kill(shmptr->ppid,SIGUSR1);
 				
@@ -326,10 +336,14 @@ switch(readComm[2]) {
 				if ((sback = (select(sock_max , &mySet, NULL, NULL, NULL ))) < 0) {
 
 					perror("Fehler bei select().");
+					shmdt((void *) shmptr);
+					shmctl(shmptr->shm_id,IPC_RMID,NULL);
 					exit(1);
 
 				} else if (sback == 0) {
 					perror("Timeout bei select().");
+					shmdt((void *) shmptr);
+					shmctl(shmptr->shm_id,IPC_RMID,NULL);
 					exit(1);
 				}		
 				
@@ -343,7 +357,7 @@ switch(readComm[2]) {
 						
 						}
 						printf("S: %s", readBuffer);
-						error(readBuffer[0], "Fehler beim Warten auf Berechnung des Spielzugs."); 
+						error(readBuffer[0], "Fehler beim Warten auf Berechnung des Spielzugs.",shmptr); 
 
 
 					} else if (FD_ISSET(shmptr->fd[0], &mySet)) {
@@ -351,10 +365,15 @@ switch(readComm[2]) {
 							free(readBuffer);
 							readBuffer = malloc(BUFFER);	
 							int n = read(shmptr->fd[0], readBuffer, sizeof(readBuffer));
-							
-							send(sock, readBuffer, strlen(readBuffer), 0);
-		
-							printf("C: %s", readBuffer);
+							printf("Read from pipe %i bytes.", n);
+
+							tmp = calloc(n+1, sizeof(char));
+							memcpy(tmp, readBuffer, n);
+                             				tmp[n] = '\0';
+							send(sock, tmp, strlen(tmp), 0);
+									
+							printf("C: %s", tmp);
+							free(tmp);
 							break;
 					}
 				}
@@ -369,7 +388,7 @@ switch(readComm[2]) {
 				}
 				// MOVEOK
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler beim Spielzug!");
+				error(readBuffer[0], "Fehler beim Spielzug!",shmptr);
 				
 				free(readBuffer);
 				readBuffer = malloc(BUFFER);
@@ -384,7 +403,7 @@ switch(readComm[2]) {
 		case 'W': /* WAIT */
 
 				printf("S: %s", readComm);
-				error(readComm[0], "Fehler im Spielverlauf: Fehler bei wait!");
+				error(readComm[0], "Fehler im Spielverlauf: Fehler bei wait!",shmptr);
 	
 				
 				send(sock, "OKWAIT\n", 7, 0);
@@ -400,7 +419,7 @@ switch(readComm[2]) {
 	
 				strcpy(winnerNrandName, readComm);
 				printf("S: %s", winnerNrandName);
-				error(winnerNrandName[0], "Fehler im Spielverlauf: Spielernummer und Spielername des Gewinners kann nicht festgelegt werden!");
+				error(winnerNrandName[0], "Fehler im Spielverlauf: Spielernummer und Spielername des Gewinners kann nicht festgelegt werden!",shmptr);
 				
 				for ( i = 0; i < BUFFER; i++) {
 	  				recv(sock, &piecesToHit[i], 1, 0);
@@ -408,7 +427,7 @@ switch(readComm[2]) {
 				}
 
 				printf("S: %s", piecesToHit);
-				error(piecesToHit[0], "Fehler im Spielverlauf: 	Anzahl zu schlagender Steine kann nicht festgelegt werden!");
+				error(piecesToHit[0], "Fehler im Spielverlauf: 	Anzahl zu schlagender Steine kann nicht festgelegt werden!",shmptr);
 				
 				for ( i = 0; i < BUFFER; i++) {
 					recv(sock, &playerCountpiecesCount[i], 1, 0);
@@ -416,7 +435,7 @@ switch(readComm[2]) {
 				}
 
 				printf("S: %s", playerCountpiecesCount);
-				error(playerCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
+				error(playerCountpiecesCount[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!",shmptr);
 				
 				
 				for(o = 0; o < shmptr->playerCount; o++) {
@@ -428,7 +447,7 @@ switch(readComm[2]) {
 					}
 
 					printf("S: %s", readBuffer);
-					error(readBuffer[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!");
+					error(readBuffer[0], "Fehler im Spielverlauf: Anzahl der Spieler und Steine kann nicht festgelegt werden!",shmptr);
 
 				}}
 
@@ -438,7 +457,7 @@ switch(readComm[2]) {
 				}
 
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im Spielverlauf: Ausgabe der Liste der Spielernummer, Steinnummer und Position kann nicht korrekt abgeschlossen werden!");
+				error(readBuffer[0], "Fehler im Spielverlauf: Ausgabe der Liste der Spielernummer, Steinnummer und Position kann nicht korrekt abgeschlossen werden!",shmptr);
 
 				for ( i = 0; i < BUFFER; i++) {
 	  				recv(sock, &readBuffer[i], 1, 0);
@@ -446,7 +465,7 @@ switch(readComm[2]) {
 				}
 
 				printf("S: %s", readBuffer);
-				error(readBuffer[0], "Fehler im Spielverlauf: TCP-Verbindung konnte nicht korrekt abgebaut werden???");
+				error(readBuffer[0], "Fehler im Spielverlauf: TCP-Verbindung konnte nicht korrekt abgebaut werden???",shmptr);
 
 				free(readComm);
 				testLoop = 0;
@@ -456,7 +475,7 @@ switch(readComm[2]) {
 
 		default:  /*- Fehlermeldung */
 		                printf("ERROR: %s\n", readComm);
-				error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!");
+				error(readComm[0], "Fehler im Spielverlauf: Fehler beim Lesen des Befehls!",shmptr);
 				break;
 	} 
 

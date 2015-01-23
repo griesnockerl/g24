@@ -4,13 +4,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
-
-struct config
-{
-	char hostname[100];
-	uint16_t portnumber;
-	char gamekindname[100];
-};
+#include "gameDetails.h" 
 
 void chomp(char *str) 
 {
@@ -28,6 +22,9 @@ struct config *confparam(FILE *datei)
 	int nRet;
 	char *pname = malloc(sizeof(char));
 	char *pwert = malloc(sizeof(char));
+	int flag1=0;
+	int flag2=0;
+	int flag3=0;
 	//Hier wird jede Zeile der Datei eingelesen und in text gespeichert.
 	while( (nRet=getline(text, t, datei)) > 0)
 	{
@@ -38,18 +35,27 @@ struct config *confparam(FILE *datei)
 		pname = strtok(pname," ");
 		//printf("%s %s\n",pname,pwert);
 		if (strcmp(pname,"GAMEKINDNAME")==0) 
-		{
+		{	flag1 +=1;
  			strcpy(conf->gamekindname, pwert);
-		} 
+		}
 		else if (strcmp(pname,"HOSTNAME")==0) 
-		{
+		{	flag2 +=1;
 			strcpy(conf->hostname, pwert);
 		}
 		else if (strcmp(pname,"PORTNUMBER")==0) 
-		{	
+		{	flag3 +=1;
   			conf->portnumber = atoi(pwert);
-        }
+        	}
+	}
+	if(flag1 !=1){
+ 			strcpy(conf->gamekindname, "MMorris");
 	}
 		
+	if(flag2 !=1){			
+			strcpy(conf->hostname, "sysprak.priv.lab.nm.ifi.lmu.de");
+	}
+	if(flag3 !=1){	
+  			conf->portnumber = 1357;
+        }
 	return conf;
 }
