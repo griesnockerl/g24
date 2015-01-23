@@ -6,11 +6,12 @@
 #include <sys/shm.h>
 #include <sys/ipc.h>
 #include <signal.h>
-#include "gameDetails.h"
 
-#include "config.c"
-#include "Connector.c"
-#include "think.c"
+#include "gameDetails.h"
+#include "performConnection.h"
+#include "config.h"
+#include "think.h"
+
 struct shm *shmptr;
 void my_handler(int sig){
 	if((shmptr->flag==1)&&(SIGUSR1==sig)){
@@ -105,7 +106,11 @@ int main(int argc, const char *argv[])
 	
 	pid_t pid;
 	int pip = pipe(shmptr->fd);
-	
+	if(pip < 0) {
+		fprintf(stderr, "Fehler bei pipe().\n");
+		return EXIT_FAILURE; 
+	}	
+
 	if ((pid = fork()) < 0) {
 		fprintf(stderr, "Fehler bei fork().\n");
 		return EXIT_FAILURE; 
@@ -113,7 +118,7 @@ int main(int argc, const char *argv[])
 	/* Connector */
 		close(shmptr->fd[1]); //Schreibseite schließen	
 		shmptr->pid = getpid();	
-		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
+		performConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
 
 		
 	} else {
