@@ -1,11 +1,15 @@
-#include <netdb.h> 
+#include <stdlib.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <fcntl.h>
 #include <sys/types.h> 
 #include <netinet/in.h> 
 #include <string.h> 
 #include <arpa/inet.h> 
 #include <stdio.h>
 #include <signal.h>
-#include "gameDetails.h" 
+#include "gameDetails.h"
+#include <sys/socket.h>
 #include <sys/select.h>  
 #define BUFFER	1024 
  
@@ -20,9 +24,15 @@
      } 
  } 
 
-
- void performConnection(int sock, char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME, struct shm *shmptr) 
+ void performConnection(char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME, struct shm *shmptr) 
  {
+	int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if(sock < 0)
+    {
+        perror("Fehler beim erzeugen des Sockets!");
+        return EXIT_FAILURE;
+    }
+
      struct sockaddr_in server; 
      struct hostent *host = gethostbyname(HOSTNAME); 
   
@@ -179,7 +189,7 @@ printf("S: %s", readBuffer);
 
 /*
 ---------------SPIELVERLAUF-------------- */
-	char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount, *playerNamepieceNrAndPos;
+	char *maxTimeforMove, *piecesToHit, *playersCountpiecesCount;
 	char *playerCountpiecesCount, *winnerNrandName;
 	int testLoop = 1;
 	char *readComm, *tmp;
@@ -241,10 +251,9 @@ switch(readComm[2]) {
 				
 				char *playCount = malloc(sizeof(char));
 				char *piecCount = malloc(sizeof(char));
-				char *strgarbage2 = malloc(BUFFER);
 
-				strgarbage2 = strtok(playersCountpiecesCount, " ,");
-				strgarbage2 = strtok(NULL, " ,");
+				strtok(playersCountpiecesCount, " ,");
+				strtok(NULL, " ,");
 				playCount = strtok(NULL, " ,");
 				piecCount = strtok(NULL, " ,");
 				

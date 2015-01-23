@@ -6,11 +6,12 @@
 #include <sys/shm.h>
 #include <sys/ipc.h>
 #include <signal.h>
-#include "gameDetails.h"
 
-#include "config.c"
-#include "Connector.c"
-#include "think.c"
+#include "gameDetails.h"
+#include "performConnection.h"
+#include "config.h"
+#include "think.h"
+
 struct shm *shmptr;
 void my_handler(int sig){
 	if((shmptr->flag==1)&&(SIGUSR1==sig)){
@@ -21,9 +22,6 @@ void my_handler(int sig){
 				firstmove = think(shmptr);
 printf("Firstmove should be: %s\n", firstmove);
 				int n= strlen(firstmove);
-				
-	
-
 
 				if ((write (shmptr->fd[1], firstmove , n)) != n) {
 	
@@ -34,7 +32,6 @@ printf("Firstmove should be: %s\n", firstmove);
 				//free(firstmove);printf("hallo");
 	}
 }
-
 
 
 
@@ -109,7 +106,11 @@ shmptr = (struct shm *) shmat(shm_id, NULL, 0);
 	
 	pid_t pid;
 	int pip = pipe(shmptr->fd);
-	
+	if(pip < 0) {
+		fprintf(stderr, "Fehler bei pipe().\n");
+		return EXIT_FAILURE; 
+	}	
+
 	if ((pid = fork()) < 0) {
 		fprintf(stderr, "Fehler bei fork().\n");
 		shmdt((void *) shmptr);
@@ -119,7 +120,7 @@ shmptr = (struct shm *) shmat(shm_id, NULL, 0);
 	/* Connector */
 		close(shmptr->fd[1]); //Schreibseite schließen	
 		shmptr->pid = getpid();	
-		setupConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
+		performConnection(gameID, conf->hostname, conf->portnumber, conf->gamekindname, shmptr);
 
 		
 	} else {
