@@ -7,6 +7,9 @@
 #include <sys/ipc.h>
 #include <signal.h>
 
+#include <string.h>
+
+
 #include "gameDetails.h"
 #include "performConnection.h"
 #include "config.h"

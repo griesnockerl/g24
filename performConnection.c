@@ -11,6 +11,7 @@
 #include "gameDetails.h"
 #include <sys/socket.h>
 #include <sys/select.h>  
+#include <sys/shm.h>
 #define BUFFER	1024 
  
  void error(char errorCode, char *msg,struct shm *shmptr) 
@@ -30,7 +31,7 @@
     if(sock < 0)
     {
         perror("Fehler beim erzeugen des Sockets!");
-        return EXIT_FAILURE;
+        exit(1);
     }
 
      struct sockaddr_in server; 
