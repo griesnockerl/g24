@@ -23,7 +23,7 @@ void my_handler(int sig){
 		
 				char *firstmove= malloc(80);
 				firstmove = think(shmptr);
-printf("Firstmove should be: %s\n", firstmove);
+				
 				int n= strlen(firstmove);
 
 				if ((write (shmptr->fd[1], firstmove , n)) != n) {
@@ -99,7 +99,7 @@ int main(int argc, const char *argv[])
 		fprintf(stderr, "Fehler bei shmat().\n");
 		return EXIT_FAILURE;
     }
-shmptr = (struct shm *) shmat(shm_id, NULL, 0);
+	shmptr = (struct shm *) shmat(shm_id, NULL, 0);
 	shmptr->shm_id=shm_id;
 	shmptr->flag=0; //SHM FLAG
 	
