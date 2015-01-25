@@ -120,7 +120,7 @@
 	 error(gameKindName[0], "Fehler im Prolog: Art des Spiels kann nicht festgelegt werden!",shmptr); 	
 	
      gameName = malloc(BUFFER);
- for ( i = 0; i < BUFFER; i++) {
+     for ( i = 0; i < BUFFER; i++) {
 	  recv(sock, &gameName[i], 1, 0);
           if (gameName[i] == '\n') break;
 	}
@@ -292,9 +292,7 @@ switch(readComm[2]) {
 					temp1 = strtok(NULL, "E");
 					temp1 = strtok(NULL, "");
 					spielernummer= atoi(temp1);
-					printf("%d,%d,%s\n",spielernummer,steinnummer,position);	
 					
-
 					if (spielernummer == 0){
 						strcpy(shmptr->p0[steinnummer], position);
 					}
@@ -375,7 +373,7 @@ switch(readComm[2]) {
 							free(readBuffer);
 							readBuffer = malloc(BUFFER);	
 							int n = read(shmptr->fd[0], readBuffer, sizeof(readBuffer));
-							printf("Read from pipe %i bytes.", n);
+							/* printf("Read from pipe %i bytes.", n); */
 
 							tmp = calloc(n+1, sizeof(char));
 							memcpy(tmp, readBuffer, n);
