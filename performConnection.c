@@ -223,7 +223,6 @@ switch(readComm[2]) {
 				maxTimeforMove=strtok(NULL,"");
 				shmptr->maxTimeMove = atoi(maxTimeforMove);
 
-				printf("%d\n",shmptr->maxTimeMove);
 
 				piecesToHit = malloc(BUFFER);
 				for ( i = 0; i < BUFFER; i++) {
@@ -237,8 +236,7 @@ switch(readComm[2]) {
 				piecesToHit=strtok(NULL," ");
 				piecesToHit=strtok(NULL,"");
 				shmptr->remainToHit = atoi(piecesToHit);
-
-				printf("%d\n",shmptr->remainToHit);
+				
 
 				playersCountpiecesCount = malloc(BUFFER);
 
@@ -262,8 +260,7 @@ switch(readComm[2]) {
 				shmptr->playerCount = atoi(playCount);
 				
 				shmptr->piecesCount = atoi(piecCount);
-				
-				printf("%d, %d\n",shmptr->playerCount,shmptr->piecesCount);
+			
 				int o, p;
 				char *temp1,*temp2,*position;
 				temp1= malloc(BUFFER);
