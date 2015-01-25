@@ -369,7 +369,7 @@ switch(readComm[2]) {
 
 							free(readBuffer);
 							readBuffer = malloc(BUFFER);	
-							int n = read(shmptr->fd[0], readBuffer, sizeof(readBuffer));
+							int n = read(shmptr->fd[0], readBuffer, 15);
 							/* printf("Read from pipe %i bytes.", n); */
 
 							tmp = calloc(n+1, sizeof(char));
