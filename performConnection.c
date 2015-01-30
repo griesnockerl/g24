@@ -28,12 +28,7 @@
  void performConnection(char *gameID, char *HOSTNAME, uint16_t PORTNUMBER, char *GAMEKINDNAME, struct shm *shmptr) 
  {
 	int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if(sock < 0)
-    {
-        perror("Fehler beim erzeugen des Sockets!");
-        exit(1);
-    }
-
+  
      struct sockaddr_in server; 
      struct hostent *host = gethostbyname(HOSTNAME); 
   
