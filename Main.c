@@ -92,13 +92,15 @@ int main(int argc, const char *argv[])
 		fprintf(stderr, "Fehler bei shmget().\n");
 		return EXIT_FAILURE;
 	}
-
+	
+	shmptr = (struct shm *) shmat(shm_id, NULL, 0);
+	
 	if (shmptr == (struct shm *) -1)
 	{
 		fprintf(stderr, "Fehler bei shmat().\n");
 		return EXIT_FAILURE;
-    }
-	shmptr = (struct shm *) shmat(shm_id, NULL, 0);
+    	}
+	
 	shmptr->shm_id=shm_id;
 	shmptr->flag=0; //SHM FLAG
 	
