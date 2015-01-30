@@ -63,8 +63,7 @@ int main(int argc, const char *argv[])
 	//-------------SHM--------------//
 	
 	int shm_id = shmget(IPC_PRIVATE, sizeof(struct shm), IPC_CREAT | 0666);
-	struct shm *shmptr = (struct shm *) shmat(shm_id, NULL, 0);
-	shmptr->flag=0; //SHM FLAG
+
 	if (shm_id < 0)
 	{
 		fprintf(stderr, "Fehler bei shmget().\n");
@@ -76,7 +75,8 @@ int main(int argc, const char *argv[])
 		fprintf(stderr, "Fehler bei shmat().\n");
 		return EXIT_FAILURE;
     }
-	
+	struct shm *shmptr = (struct shm *) shmat(shm_id, NULL, 0);
+	shmptr->flag=0; //SHM FLAG	
 
 
 	//-------------FORK-------------//
