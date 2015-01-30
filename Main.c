@@ -86,8 +86,7 @@ int main(int argc, const char *argv[])
 	//-------------SHM--------------//
 	
 	int shm_id = shmget(IPC_PRIVATE, sizeof(struct shm), IPC_CREAT | 0666);
-	shmptr = (struct shm *) shmat(shm_id, NULL, 0);
-	shmptr->flag=0; //SHM FLAG
+	
 	if (shm_id < 0)
 	{
 		fprintf(stderr, "Fehler bei shmget().\n");
